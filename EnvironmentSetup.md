@@ -1,6 +1,3 @@
-Here is the English version of the setup guide, documenting only the successful steps.
-
----
 
 # AArch64 Linux Development Environment on Apple Silicon (macOS)
 
@@ -244,8 +241,3 @@ Create `.vscode/c_cpp_properties.json` to enable code completion and navigation 
 3. **Ubuntu Cloud kernel + Alpine initramfs**: A stable combination that boots quickly and supports SVE
 4. **Enable `sve=on`**: Essential for SVE/SVE2 instruction support in QEMU
 5. **Proper exit method**: Use `Ctrl+A X` instead of typing `exit` in the initramfs shell
-
----
-
-**Next Steps for SVE2 Development:**
-You can now write code using `<arm_sve.h>` intrinsics, compile with the same Makefile (add `-march=armv8-a+sve2` to CFLAGS if needed), and run in QEMU with SVE support enabled.
