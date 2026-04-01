@@ -14,4 +14,5 @@ qemu-system-aarch64 \
   -initrd initramfs.cpio.gz \
   -append "console=ttyAMA0 rdinit=/init nokaslr" \
   -nographic \
-  -no-reboot
+  -no-reboot \
+  | python3 console_filter.py
