@@ -2,6 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Clean",
+            "type": "shell",
+            "command": "make clean",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": "$gcc"
+        },
+        {
             "label": "Build AArch64",
             "type": "shell",
             "command": "make",
@@ -9,7 +19,8 @@
                 "kind": "build",
                 "isDefault": false
             },
-            "problemMatcher": "$gcc"
+            "problemMatcher": "$gcc",
+            "dependsOn": "Clean"
         },
         {
             "label": "Run Auto",
@@ -26,15 +37,6 @@
             },
             "dependsOn": "Build AArch64"
         },
-        {
-            "label": "Clean",
-            "type": "shell",
-            "command": "make clean",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": "$gcc"
-        },
+
     ]
 }

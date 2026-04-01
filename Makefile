@@ -9,7 +9,7 @@ TARGET_FLAGS = --target=aarch64-linux-gnu \
 
 CFLAGS = $(TARGET_FLAGS) -O3 -flto -Wall -static -g
 
-CFLAGS  += -march=armv8-a+sve2 -fno-vectorize -fno-slp-vectorize -msve-vector-bits=256
+CFLAGS  += -march=armv8-a+sve2 -fno-vectorize -fno-slp-vectorize #-msve-vector-bits=256
 
 TARGET = test
 

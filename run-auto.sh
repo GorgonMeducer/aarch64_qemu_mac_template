@@ -9,8 +9,7 @@ echo ""
 
 qemu-system-aarch64 \
   -M virt \
-  -cpu max,sve=on \
-  -m 256 \
+  -cpu max,sve256=on \
   -kernel vmlinuz \
   -initrd initramfs.cpio.gz \
   -append "console=ttyAMA0 rdinit=/init nokaslr" \
