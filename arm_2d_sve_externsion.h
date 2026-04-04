@@ -6,6 +6,15 @@
 #include <arm_sve.h>
 #include <stdint.h>
 
+#define svlenu8()   svcntb_pat(SV_ALL)
+#define svlenu16()  (svcntb_pat(SV_ALL) / sizeof(uint16_t))
+#define svlenu32()  (svcntb_pat(SV_ALL) / sizeof(uint32_t))
+#define svlenu64()  (svcntb_pat(SV_ALL) / sizeof(uint64_t))
+
+#define svlens8()   svlenu8()
+#define svlens16()  svlenu16()
+#define svlens32()  svlenu32()
+#define svlens64()  svlenu64()
 
 static inline
 __attribute__((nonnull(2,3,4)))
@@ -50,14 +59,17 @@ void svst4u8_u16(svbool_t vPred, uint8_t *pchTarget, svuint16x4_t *pvLow, svuint
     svst4_u8(vPred, pchTarget, vOutput8x4 );
 }
 
-#define svlenu8()   svcntb_pat(SV_ALL)
-#define svlenu16()  (svcntb_pat(SV_ALL) / sizeof(uint16_t))
-#define svlenu32()  (svcntb_pat(SV_ALL) / sizeof(uint32_t))
-#define svlenu64()  (svcntb_pat(SV_ALL) / sizeof(uint64_t))
+/*! \note the Element of vMask is no bigger than 0xFF
+ */
+static inline
+svuint16_t __arm_2d_sve_chn_blend_with_mask(svuint16_t vSource, svuint16_t vTarget, svuint16_t vMask)
+{
+    vMask = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask, 255), 
+                        vMask, 
+                        svdup_u16(1));
 
-#define svlens8()   svlenu8()
-#define svlens16()  svlenu16()
-#define svlens32()  svlenu32()
-#define svlens64()  svlenu64()
+    vTarget = vSource * vMask + vTarget * (256 - vMask);
+    return vTarget >> 8;
+}
 
 #endif

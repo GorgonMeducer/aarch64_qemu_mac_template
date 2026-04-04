@@ -108,13 +108,8 @@ void sve_tester(uint32_t * __restrict pwSource,
             svuint16_t vTarget = svget4(vTargetLow16x4, 0);
             svuint16_t vAlpha = svget4(vSourceLow16x4, 3);
 
-            vAlpha = svadd_u16_m(   svcmpeq_n_u16(svptrue_b16(), vAlpha, 255), 
-                                    vAlpha, 
-                                    svdup_u16(1));
+            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
 
-            vTarget = vSource * vAlpha + vTarget * (256 - vAlpha);
-            vTarget >>= 8;
-            
             vTargetLow16x4 = svset4(vTargetLow16x4, 0, vTarget);
         } while(0);
 
@@ -123,12 +118,7 @@ void sve_tester(uint32_t * __restrict pwSource,
             svuint16_t vTarget = svget4(vTargetLow16x4, 1);
             svuint16_t vAlpha = svget4(vSourceLow16x4, 3);
 
-            vAlpha = svadd_u16_m(   svcmpeq_n_u16(svptrue_b16(), vAlpha, 255), 
-                                    vAlpha, 
-                                    svdup_u16(1));
-
-            vTarget = vSource * vAlpha + vTarget * (256 - vAlpha);
-            vTarget >>= 8;
+            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
             
             vTargetLow16x4 = svset4(vTargetLow16x4, 1, vTarget);
         } while(0);
@@ -138,39 +128,17 @@ void sve_tester(uint32_t * __restrict pwSource,
             svuint16_t vTarget = svget4(vTargetLow16x4, 2);
             svuint16_t vAlpha = svget4(vSourceLow16x4, 3);
 
-            vAlpha = svadd_u16_m(   svcmpeq_n_u16(svptrue_b16(), vAlpha, 255), 
-                                    vAlpha, 
-                                    svdup_u16(1));
-
-            vTarget = vSource * vAlpha + vTarget * (256 - vAlpha);
-            vTarget >>= 8;
+            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
             
             vTargetLow16x4 = svset4(vTargetLow16x4, 2, vTarget);
         } while(0);
-
-    #if 0
-        do {
-            svuint16_t vSource = svget4(vSourceLow16x4, 3);
-            svuint16_t vTarget = svget4(vTargetLow16x4, 3);
-            svuint16_t vAlpha = svget4(vSourceLow16x4, 3);
-
-            vTarget = svdup_u16(255);
-            
-            vTargetLow16x4 = svset4(vTargetLow16x4, 3, vTarget);
-        } while(0);
-    #endif
 
         do {
             svuint16_t vSource = svget4(vSourceHigh16x4, 0);
             svuint16_t vTarget = svget4(vTargetHigh16x4, 0);
             svuint16_t vAlpha = svget4(vSourceHigh16x4, 3);
 
-            vAlpha = svadd_u16_m(   svcmpeq_n_u16(svptrue_b16(), vAlpha, 255), 
-                                    vAlpha, 
-                                    svdup_u16(1));
-
-            vTarget = vSource * vAlpha + vTarget * (256 - vAlpha);
-            vTarget >>= 8;
+            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
             
             vTargetHigh16x4 = svset4(vTargetHigh16x4, 0, vTarget);
         } while(0);
@@ -179,12 +147,7 @@ void sve_tester(uint32_t * __restrict pwSource,
             svuint16_t vTarget = svget4(vTargetHigh16x4, 1);
             svuint16_t vAlpha = svget4(vSourceHigh16x4, 3);
 
-            vAlpha = svadd_u16_m(   svcmpeq_n_u16(svptrue_b16(), vAlpha, 255), 
-                                    vAlpha, 
-                                    svdup_u16(1));
-
-            vTarget = vSource * vAlpha + vTarget * (256 - vAlpha);
-            vTarget >>= 8;
+            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
             
             vTargetHigh16x4 = svset4(vTargetHigh16x4, 1, vTarget);
         } while(0);
@@ -193,26 +156,10 @@ void sve_tester(uint32_t * __restrict pwSource,
             svuint16_t vTarget = svget4(vTargetHigh16x4, 2);
             svuint16_t vAlpha = svget4(vSourceHigh16x4, 3);
 
-            vAlpha = svadd_u16_m(   svcmpeq_n_u16(svptrue_b16(), vAlpha, 255), 
-                                    vAlpha, 
-                                    svdup_u16(1));
-
-            vTarget = vSource * vAlpha + vTarget * (256 - vAlpha);
-            vTarget >>= 8;
+            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
             
             vTargetHigh16x4 = svset4(vTargetHigh16x4, 2, vTarget);
         } while(0);
-
-    #if 0
-        do {
-            svuint16_t vSource = svget4(vSourceHigh16x4, 3);
-            svuint16_t vTarget = svget4(vTargetHigh16x4, 3);
-
-            vTarget = svdup_u16(255);
-            
-            vTargetHigh16x4 = svset4(vTargetHigh16x4, 3, vTarget);
-        } while(0);
-    #endif
 
         svst4u8_u16(vTailPred, (uint8_t *)pwTarget, &vTargetLow16x4, &vTargetHigh16x4);
 
