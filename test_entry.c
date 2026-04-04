@@ -103,6 +103,7 @@ void sve_tester(uint32_t * __restrict pwSource,
         svld4u8_u16(vTailPred, (uint8_t *)pwSource, &vSourceLow16x4, &vSourceHigh16x4);
         svld4u8_u16(vTailPred, (uint8_t *)pwTarget, &vTargetLow16x4, &vTargetHigh16x4);
 
+
         do {
             svuint16_t vSource = svget4(vSourceLow16x4, 0);
             svuint16_t vTarget = svget4(vTargetLow16x4, 0);
