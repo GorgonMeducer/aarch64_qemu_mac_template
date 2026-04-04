@@ -3,14 +3,15 @@
         {
             "name": "AArch64 Linux",
             "includePath": [
-                "${workspaceFolder}/**",
                 "${env:HOME}/arm-cross/aarch64-toolchain/aarch64-none-linux-gnu/libc/usr/include/**",
                 "${env:HOME}/arm-cross/aarch64-toolchain/lib/gcc/aarch64-none-linux-gnu/14.2.1/include/**"
+                "${workspaceFolder}/**",
             ],
             "defines": [
                 "__aarch64__",
                 "__linux__",
-                "__SVE__"
+                "__SVE__",
+                "__ARM_FEATURE_SVE2"
             ],
             "compilerPath": "/opt/homebrew/opt/llvm/bin/clang",
             "cStandard": "c11",

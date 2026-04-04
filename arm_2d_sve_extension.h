@@ -16,6 +16,41 @@
 #define svlens32()  svlenu32()
 #define svlens64()  svlenu64()
 
+#define __arm_2d_sve_stride_loop_ccca8888__(__stride_size, __pred_name)         \
+    for (   svbool_t __pred_name, *pTemp = &__pred_name;                        \
+            pTemp != NULL;                                                      \
+            pTemp = NULL)                                                       \
+        for (   size_t PERFC_SAFE_NAME(n) = 0,                                  \
+                __iteration_advance__ = svlenu32() * 4;                         \
+                ({  __pred_name = svwhilelt_b8( PERFC_SAFE_NAME(n),             \
+                                                (__stride_size));               \
+                    PERFC_SAFE_NAME(n) < (__stride_size);                       \
+                });                                                             \
+                PERFC_SAFE_NAME(n) += __iteration_advance__)
+
+
+#define __arm_2d_sve_stride_ccca_foreach_chn012__(  __source_u16x4,             \
+                                                    __target_u16x4,             \
+                                                    ...)                        \
+        do {                                                                    \
+            svuint16_t __svu16_source__ = svget4((__source_u16x4), 0);          \
+            svuint16_t __svu16_target__ = svget4((__target_u16x4), 0);          \
+            __VA_ARGS__                                                         \
+            __target_u16x4 = svset4(__target_u16x4, 0, __svu16_target__);       \
+        } while(0);                                                             \
+        do {                                                                    \
+            svuint16_t __svu16_source__ = svget4((__source_u16x4), 1);          \
+            svuint16_t __svu16_target__ = svget4((__target_u16x4), 1);          \
+            __VA_ARGS__                                                         \
+            __target_u16x4 = svset4(__target_u16x4, 1, __svu16_target__);       \
+        } while(0);                                                             \
+        do {                                                                    \
+            svuint16_t __svu16_source__ = svget4((__source_u16x4), 2);          \
+            svuint16_t __svu16_target__ = svget4((__target_u16x4), 2);          \
+            __VA_ARGS__                                                         \
+            __target_u16x4 = svset4(__target_u16x4, 2, __svu16_target__);       \
+        } while(0)
+
 static inline
 __attribute__((nonnull(2,3,4)))
 void svld4u8_u16(   svbool_t vPred, 

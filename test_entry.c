@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 #include "sve_util.h"
-#include "arm_2d_sve_externsion.h"
+#include "arm_2d_sve_extension.h"
 
 __attribute__((nonnull(1,2)))
 void sve_tester(uint32_t * __restrict pwSource, 
@@ -88,11 +88,7 @@ void sve_tester(uint32_t * __restrict pwSource,
                 size_t uStride)
 {
 #if 1
-    size_t n = 0;
-    size_t nVectorLengthU32 = svlenu32();
-    
-    do {
-        svbool_t vTailPred = svwhilelt_b8(n, uStride);
+    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred){
 
         svuint16x4_t vSourceLow16x4 = svundef4_u16();
         svuint16x4_t vSourceHigh16x4 = svundef4_u16();
@@ -103,73 +99,32 @@ void sve_tester(uint32_t * __restrict pwSource,
         svld4u8_u16(vTailPred, (uint8_t *)pwSource, &vSourceLow16x4, &vSourceHigh16x4);
         svld4u8_u16(vTailPred, (uint8_t *)pwTarget, &vTargetLow16x4, &vTargetHigh16x4);
 
-
-        do {
-            svuint16_t vSource = svget4(vSourceLow16x4, 0);
-            svuint16_t vTarget = svget4(vTargetLow16x4, 0);
+        /* process low half */
+        __arm_2d_sve_stride_ccca_foreach_chn012__(vSourceLow16x4, vTargetLow16x4,
             svuint16_t vAlpha = svget4(vSourceLow16x4, 3);
 
-            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_mask( __svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vAlpha);
 
-            vTargetLow16x4 = svset4(vTargetLow16x4, 0, vTarget);
-        } while(0);
+        );
 
-        do {
-            svuint16_t vSource = svget4(vSourceLow16x4, 1);
-            svuint16_t vTarget = svget4(vTargetLow16x4, 1);
-            svuint16_t vAlpha = svget4(vSourceLow16x4, 3);
-
-            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
-            
-            vTargetLow16x4 = svset4(vTargetLow16x4, 1, vTarget);
-        } while(0);
-
-        do {
-            svuint16_t vSource = svget4(vSourceLow16x4, 2);
-            svuint16_t vTarget = svget4(vTargetLow16x4, 2);
-            svuint16_t vAlpha = svget4(vSourceLow16x4, 3);
-
-            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
-            
-            vTargetLow16x4 = svset4(vTargetLow16x4, 2, vTarget);
-        } while(0);
-
-        do {
-            svuint16_t vSource = svget4(vSourceHigh16x4, 0);
-            svuint16_t vTarget = svget4(vTargetHigh16x4, 0);
+        /* process high half */
+        __arm_2d_sve_stride_ccca_foreach_chn012__(vSourceHigh16x4, vTargetHigh16x4,
             svuint16_t vAlpha = svget4(vSourceHigh16x4, 3);
 
-            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
-            
-            vTargetHigh16x4 = svset4(vTargetHigh16x4, 0, vTarget);
-        } while(0);
-        do {
-            svuint16_t vSource = svget4(vSourceHigh16x4, 1);
-            svuint16_t vTarget = svget4(vTargetHigh16x4, 1);
-            svuint16_t vAlpha = svget4(vSourceHigh16x4, 3);
-
-            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
-            
-            vTargetHigh16x4 = svset4(vTargetHigh16x4, 1, vTarget);
-        } while(0);
-        do {
-            svuint16_t vSource = svget4(vSourceHigh16x4, 2);
-            svuint16_t vTarget = svget4(vTargetHigh16x4, 2);
-            svuint16_t vAlpha = svget4(vSourceHigh16x4, 3);
-
-            vTarget = __arm_2d_sve_chn_blend_with_mask(vSource, vTarget, vAlpha);
-            
-            vTargetHigh16x4 = svset4(vTargetHigh16x4, 2, vTarget);
-        } while(0);
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_mask( __svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vAlpha);
+        );
 
         svst4u8_u16(vTailPred, (uint8_t *)pwTarget, &vTargetLow16x4, &vTargetHigh16x4);
 
-        n += nVectorLengthU32 * 4;
-
-        pwSource += nVectorLengthU32 * 4;
-        pwTarget += nVectorLengthU32 * 4;
-
-    } while(n < uStride);
+        pwSource += __iteration_advance__;
+        pwTarget += __iteration_advance__;
+    }
 
 #endif
 
