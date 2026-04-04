@@ -89,23 +89,73 @@ void sve_tester(uint32_t * __restrict pwSource,
 {
 #if 1
     size_t n = 0;
-    size_t nVectorLengthU32 = svcntb_pat(SV_ALL) / sizeof(uint32_t);
+    size_t nVectorLengthU32 = svlenu32();
     uStride *= sizeof(uint32_t);
     
     do {
         svbool_t vTailPred = svwhilelt_b8(n, uStride);
 
-        svuint16x4_t vInputLow16x4 = svundef4_u16();
-        svuint16x4_t vInputHigh16x4 = svundef4_u16();
+        svuint16x4_t vSourceLow16x4 = svundef4_u16();
+        svuint16x4_t vSourceHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, (uint8_t *)pwSource, &vInputLow16x4, &vInputHigh16x4);
+        svuint16x4_t vTargetLow16x4 = svundef4_u16();
+        svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svst4u8_u16(vTailPred, (uint8_t *)pwTarget, &vInputLow16x4, &vInputHigh16x4);
+        svld4u8_u16(vTailPred, (uint8_t *)pwSource, &vSourceLow16x4, &vSourceHigh16x4);
+        svld4u8_u16(vTailPred, (uint8_t *)pwTarget, &vTargetLow16x4, &vTargetHigh16x4);
 
-        n += nVectorLengthU32 * sizeof(uint32_t);
 
-        pwSource += nVectorLengthU32;
-        pwTarget += nVectorLengthU32;
+        do {
+            svuint16_t vSource = svget4(vSourceLow16x4, 0);
+            svuint16_t vTarget = svget4(vTargetLow16x4, 0);
+
+            vTarget = vSource;
+            
+            vTargetLow16x4 = svset4(vTargetLow16x4, 0, vTarget);
+        } while(0);
+
+        do {
+            svuint16_t vSource = svget4(vSourceLow16x4, 1);
+            svuint16_t vTarget = svget4(vTargetLow16x4, 1);
+
+            vTarget = vSource;
+            
+            vTargetLow16x4 = svset4(vTargetLow16x4, 1, vTarget);
+        } while(0);
+
+        do {
+            svuint16_t vSource = svget4(vSourceLow16x4, 2);
+            svuint16_t vTarget = svget4(vTargetLow16x4, 2);
+
+            vTarget = vSource;
+            
+            vTargetLow16x4 = svset4(vTargetLow16x4, 2, vTarget);
+        } while(0);
+
+        do {
+            svuint16_t vSource = svget4(vSourceLow16x4, 3);
+            svuint16_t vTarget = svget4(vTargetLow16x4, 3);
+
+            vTarget = vSource;
+            
+            vTargetLow16x4 = svset4(vTargetLow16x4, 3, vTarget);
+        } while(0);
+
+        do {
+            svuint16_t vSource = svget4(vSourceHigh16x4, 3);
+            svuint16_t vTarget = svget4(vTargetHigh16x4, 3);
+
+            vTarget = vSource;
+            
+            vTargetHigh16x4 = svset4(vTargetHigh16x4, 3, vTarget);
+        } while(0);
+
+        svst4u8_u16(vTailPred, (uint8_t *)pwTarget, &vTargetLow16x4, &vTargetHigh16x4);
+
+        n += nVectorLengthU32 * sizeof(uint32_t) * 4;
+
+        pwSource += nVectorLengthU32 * 4;
+        pwTarget += nVectorLengthU32 * 4;
 
     } while(n < uStride);
 
