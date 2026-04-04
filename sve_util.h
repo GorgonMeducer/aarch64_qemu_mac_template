@@ -1,5 +1,5 @@
-#ifndef __UTIL_H__
-#define __UTIL_H__
+#ifndef __SVE_UTIL_H__
+#define __SVE_UTIL_H__
 
 #undef __PERFC_CONNECT2
 #undef __PERFC_CONNECT3
@@ -63,6 +63,16 @@
             ALT_PERFC_CONNECT2( PERFC_CONNECT,                                  \
                                 __PLOOC_VA_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
 
+#ifndef __PLOOC_VA_NUM_ARGS_IMPL
+#   define __PLOOC_VA_NUM_ARGS_IMPL( _0,_1,_2,_3,_4,_5,_6,_7,_8,_9,_10,_11,     \
+                                    _12,_13,_14,_15,_16,__N,...)      __N
+#endif
+
+#ifndef __PLOOC_VA_NUM_ARGS
+#define __PLOOC_VA_NUM_ARGS(...)                                                \
+            __PLOOC_VA_NUM_ARGS_IMPL( 0,##__VA_ARGS__,16,15,14,13,12,11,10,9,   \
+                                      8,7,6,5,4,3,2,1,0)
+#endif
 
 
 #define SAFE_NAME(__NAME)           PERFC_CONNECT3(__,__NAME,__LINE__)
@@ -262,4 +272,35 @@
                                                                         \
         printf("]\r\n");                                                \
     } while(0)
-#endif
+
+
+#define SVT_PRINT_BUFFER(__BUFF_PTR, __TYPE_T, __FMT_STR, __STRIDE)             \
+    do {                                                                        \
+        __TYPE_T *pBuffer = (__TYPE_T *)__BUFF_PTR;                             \
+        size_t nElementCount = INPUT_BUFFER_SIZE / sizeof(__TYPE_T);            \
+                                                                                \
+        size_t nStrideSize = (__STRIDE);                                        \
+        size_t nLineCount = 0;                                                  \
+                                                                                \
+        printf("%s\n\t", #__BUFF_PTR);                                          \
+        do {                                                                    \
+                                                                                \
+            printf(__FMT_STR " ", *pBuffer++);                                  \
+            nLineCount++;                                                       \
+            if (nLineCount >= nStrideSize) {                                    \
+                nLineCount = 0;                                                 \
+                printf("\n\t");                                                 \
+            }                                                                   \
+                                                                                \
+        } while(--nElementCount);                                               \
+        printf("\n");                                                           \
+                                                                                \
+    } while(0)
+
+
+
+
+
+
+
+#endif     /* __SVE_UTIL_H__ */
