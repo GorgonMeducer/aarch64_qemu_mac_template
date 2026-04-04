@@ -223,54 +223,54 @@
     } while(0)
 
 
-#define SVT_INIT_PRED(__PREDICT, ...)                                   \
-    do {                                                                \
-        uint8_t PERFC_SAFE_NAME(chBuffer)[svlen(svundef_u64())];        \
-        memset( PERFC_SAFE_NAME(chBuffer),                              \
-                0,                                                      \
-                sizeof(PERFC_SAFE_NAME(chBuffer)));                     \
-                                                                        \
-        memcpy( PERFC_SAFE_NAME(chBuffer),                              \
-                (uint8_t []){__VA_ARGS__},                              \
-                MIN(sizeof(PERFC_SAFE_NAME(chBuffer)),                  \
-                    sizeof((uint8_t []){__VA_ARGS__})));                \
-                                                                        \
-        __PREDICT = (*(svbool_t *)PERFC_SAFE_NAME(chBuffer));           \
+#define SVT_INIT_PRED(__PREDICT, ...)                                           \
+    do {                                                                        \
+        uint8_t PERFC_SAFE_NAME(chBuffer)[svlen(svundef_u64())];                \
+        memset( PERFC_SAFE_NAME(chBuffer),                                      \
+                0,                                                              \
+                sizeof(PERFC_SAFE_NAME(chBuffer)));                             \
+                                                                                \
+        memcpy( PERFC_SAFE_NAME(chBuffer),                                      \
+                (uint8_t []){__VA_ARGS__},                                      \
+                MIN(sizeof(PERFC_SAFE_NAME(chBuffer)),                          \
+                    sizeof((uint8_t []){__VA_ARGS__})));                        \
+                                                                                \
+        __PREDICT = (*(svbool_t *)PERFC_SAFE_NAME(chBuffer));                   \
     } while(0)
 
-#define SVT_PRINT_PRED(__PREDICT, __TYPE_T)                             \
-    do {                                                                \
-        printf("%8s\t[", #__PREDICT);                                   \
-        uint16_t PERFC_SAFE_NAME(hwBuffer)[svlen(svundef_u64()) / 2];   \
-        memset( PERFC_SAFE_NAME(hwBuffer),                              \
-                0,                                                      \
-                sizeof(PERFC_SAFE_NAME(hwBuffer)));                     \
-        *(volatile svbool_t *)PERFC_SAFE_NAME(hwBuffer) = (__PREDICT);  \
-                                                                        \
-        uint_fast16_t PERFC_SAFE_NAME(nTotalBits) = svlen(svundef_u8());\
-        uint_fast8_t PERFC_SAFE_NAME(nElementBits) = sizeof(__TYPE_T);  \
-                                                                        \
-        uint16_t *phwPred = PERFC_SAFE_NAME(hwBuffer);                  \
-        do {                                                            \
-            uint16_t hwPred = *phwPred++;                               \
-                                                                        \
-            for (   uint_fast8_t n = 0;                                 \
-                    n < 16;                                             \
-                    n += PERFC_SAFE_NAME(nElementBits)) {               \
-                                                                        \
-                if (hwPred & 0x01) {                                    \
-                    printf("True");                                     \
-                } else {                                                \
-                    printf("False");                                    \
-                }                                                       \
-                printf("%*s\t", (int)sizeof(__TYPE_T)-1, "");           \
-                hwPred >>= PERFC_SAFE_NAME(nElementBits);               \
-            }                                                           \
-                                                                        \
-            PERFC_SAFE_NAME(nTotalBits) -= 16;                          \
-        } while(PERFC_SAFE_NAME(nTotalBits));                           \
-                                                                        \
-        printf("]\r\n");                                                \
+#define SVT_PRINT_PRED(__PREDICT, __TYPE_T)                                     \
+    do {                                                                        \
+        printf("%8s\t[", #__PREDICT);                                           \
+        uint16_t PERFC_SAFE_NAME(hwBuffer)[svlen(svundef_u64()) / 2];           \
+        memset( PERFC_SAFE_NAME(hwBuffer),                                      \
+                0,                                                              \
+                sizeof(PERFC_SAFE_NAME(hwBuffer)));                             \
+        *(volatile svbool_t *)PERFC_SAFE_NAME(hwBuffer) = (__PREDICT);          \
+                                                                                \
+        uint_fast16_t PERFC_SAFE_NAME(nTotalBits) = svlen(svundef_u8());        \
+        uint_fast8_t PERFC_SAFE_NAME(nElementBits) = sizeof(__TYPE_T);          \
+                                                                                \
+        uint16_t *phwPred = PERFC_SAFE_NAME(hwBuffer);                          \
+        do {                                                                    \
+            uint16_t hwPred = *phwPred++;                                       \
+                                                                                \
+            for (   uint_fast8_t n = 0;                                         \
+                    n < 16;                                                     \
+                    n += PERFC_SAFE_NAME(nElementBits)) {                       \
+                                                                                \
+                if (hwPred & 0x01) {                                            \
+                    printf("True");                                             \
+                } else {                                                        \
+                    printf("False");                                            \
+                }                                                               \
+                printf("%*s\t", (int)sizeof(__TYPE_T)-1, "");                   \
+                hwPred >>= PERFC_SAFE_NAME(nElementBits);                       \
+            }                                                                   \
+                                                                                \
+            PERFC_SAFE_NAME(nTotalBits) -= 16;                                  \
+        } while(PERFC_SAFE_NAME(nTotalBits));                                   \
+                                                                                \
+        printf("]\r\n");                                                        \
     } while(0)
 
 
