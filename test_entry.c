@@ -82,7 +82,7 @@ int main(void) {
                                             (uint32_t *)pchTarget, 
                                             OUTPUT_BUFFER_SIZE / sizeof(uint32_t), 
                                             128);
-#endif
+
     
     __arm_2d_sve_cccn888_blend_with_masks(  (uint32_t *)pchSource, 
                                             (uint32_t *)pchTarget, 
@@ -90,6 +90,9 @@ int main(void) {
                                             pchMask,
                                             OUTPUT_BUFFER_SIZE / sizeof(uint32_t));
     //sve_tester((uint32_t *)pchSource, (uint32_t *)pchTarget, OUTPUT_BUFFER_SIZE / sizeof(uint32_t));
+#endif
+
+    __arm_2d_sve_cccn888_fill_colour_with_opacity((uint32_t *)pchTarget, 128, 0x00, 128);
 
     SVT_PRINT_BUFFER(pchSource, uint8_t, "%02"PRIx8, 64);
     SVT_PRINT_BUFFER(pchTarget, uint8_t, "%02"PRIx8, 64);
@@ -107,6 +110,7 @@ void sve_tester(uint32_t * __restrict pwSource,
                 uint32_t * __restrict pwTarget, 
                 size_t uStride)
 {
+
 #if 1
     __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred){
 
