@@ -55,8 +55,11 @@ int main(void) {
 
 #endif
 
-#define INPUT_BUFFER_SIZE       (sizeof(uint32_t) * 128)
-#define OUTPUT_BUFFER_SIZE      (sizeof(uint32_t) * 128)
+#define PIXEL_COUNT             128
+
+#define INPUT_BUFFER_SIZE       (sizeof(uint32_t) * PIXEL_COUNT)
+#define OUTPUT_BUFFER_SIZE      (sizeof(uint32_t) * PIXEL_COUNT)
+#define MASK_SIZE               (sizeof(uint8_t) * PIXEL_COUNT)
 
     uint8_t *pchSource = (uint8_t *)malloc(INPUT_BUFFER_SIZE);
     assert(NULL != pchSource);
@@ -66,18 +69,35 @@ int main(void) {
         pchSource[n] = chData;
     }
 
-
     uint8_t *pchTarget = (uint8_t *)malloc(OUTPUT_BUFFER_SIZE);
-    assert(NULL != pchSource);
-    memset(pchTarget, 0, OUTPUT_BUFFER_SIZE);
+    assert(NULL != pchTarget);
+    memset(pchTarget, 0xFF, OUTPUT_BUFFER_SIZE);
 
-    sve_tester((uint32_t *)pchSource, (uint32_t *)pchTarget, OUTPUT_BUFFER_SIZE / sizeof(uint32_t));
+    uint8_t *pchMask = (uint8_t *)malloc(MASK_SIZE);
+    assert(NULL != pchMask);
+    memset(pchMask, 0xFF, MASK_SIZE);
+
+#if 0
+    __arm_2d_sve_cccn888_blend_with_opacity((uint32_t *)pchSource, 
+                                            (uint32_t *)pchTarget, 
+                                            OUTPUT_BUFFER_SIZE / sizeof(uint32_t), 
+                                            128);
+#endif
+    
+    __arm_2d_sve_cccn888_blend_with_source_mask_and_opacity((uint32_t *)pchSource, 
+                                                (uint32_t *)pchTarget, 
+                                                pchMask,
+                                                OUTPUT_BUFFER_SIZE / sizeof(uint32_t),
+                                                128);
+    //sve_tester((uint32_t *)pchSource, (uint32_t *)pchTarget, OUTPUT_BUFFER_SIZE / sizeof(uint32_t));
 
     SVT_PRINT_BUFFER(pchSource, uint8_t, "%02"PRIx8, 64);
     SVT_PRINT_BUFFER(pchTarget, uint8_t, "%02"PRIx8, 64);
 
+    
     free(pchSource);
     free(pchTarget);
+    free(pchMask);
 
     return 0;
 }

@@ -301,6 +301,4 @@
 
 
 
-
-
 #endif     /* __SVE_UTIL_H__ */
