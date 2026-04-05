@@ -84,11 +84,11 @@ int main(void) {
                                             128);
 #endif
     
-    __arm_2d_sve_cccn888_blend_with_source_mask_and_opacity((uint32_t *)pchSource, 
-                                                (uint32_t *)pchTarget, 
-                                                pchMask,
-                                                OUTPUT_BUFFER_SIZE / sizeof(uint32_t),
-                                                128);
+    __arm_2d_sve_cccn888_blend_with_masks(  (uint32_t *)pchSource, 
+                                            (uint32_t *)pchTarget, 
+                                            pchMask,
+                                            pchMask,
+                                            OUTPUT_BUFFER_SIZE / sizeof(uint32_t));
     //sve_tester((uint32_t *)pchSource, (uint32_t *)pchTarget, OUTPUT_BUFFER_SIZE / sizeof(uint32_t));
 
     SVT_PRINT_BUFFER(pchSource, uint8_t, "%02"PRIx8, 64);
