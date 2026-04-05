@@ -152,6 +152,55 @@ svuint16_t __arm_2d_sve_chn_blend_with_mask_and_opacity(svuint16_t vSource,
     return vTarget >> 8;
 }
 
+/*! \note the Element range of vMask0/1 is [0, 0xFF]
+ */
+__STATIC_INLINE
+svuint16_t __arm_2d_sve_chn_blend_with_masks(   svuint16_t vSource, 
+                                                svuint16_t vTarget, 
+                                                svuint16_t vMask0,
+                                                svuint16_t vMask1)
+{
+    vMask1 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask1, 255), 
+                         vMask1, 
+                         svdup_u16(1));
+
+    svuint16_t vMask = 
+        svsel(  svcmpeq_n_u16(svptrue_b16(), vMask0, 255), 
+                vMask1, 
+                (vMask0 * vMask1) >> 8);
+
+    vTarget = vSource * vMask + vTarget * (256 - vMask);
+    return vTarget >> 8;
+}
+
+/*! \note the Element range of vMask0/1 is [0, 0xFF]
+ *  \note the hwOpacity range [0, 0x100]
+ */
+__STATIC_INLINE
+svuint16_t __arm_2d_sve_chn_blend_with_masks_and_opacity(
+                                                svuint16_t vSource, 
+                                                svuint16_t vTarget, 
+                                                svuint16_t vMask0,
+                                                svuint16_t vMask1,
+                                                uint16_t hwOpacity)
+{
+    vMask1 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask1, 255), 
+                         vMask1, 
+                         svdup_u16(1));
+
+    svuint16_t vMask = 
+        svsel(  svcmpeq_n_u16(svptrue_b16(), vMask0, 255), 
+                vMask1, 
+                (vMask0 * vMask1) >> 8);
+
+    vMask = svsel(  svcmpeq_n_u16(svptrue_b16(), vMask, 256), 
+                    svdup_u16(hwOpacity), 
+                    (vMask * hwOpacity) >> 8);
+
+    vTarget = vSource * vMask + vTarget * (256 - vMask);
+    return vTarget >> 8;
+}
+
 
 
 #include "__arm_2d_sve_stride_cccn888.h"
