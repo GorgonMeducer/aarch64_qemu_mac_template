@@ -274,10 +274,10 @@
     } while(0)
 
 
-#define SVT_PRINT_BUFFER(__BUFF_PTR, __TYPE_T, __FMT_STR, __STRIDE)             \
+#define SVT_PRINT_BUFFER(__BUFF_PTR, __SIZE, __TYPE_T, __FMT_STR, __STRIDE)     \
     do {                                                                        \
         __TYPE_T *pBuffer = (__TYPE_T *)__BUFF_PTR;                             \
-        size_t nElementCount = INPUT_BUFFER_SIZE / sizeof(__TYPE_T);            \
+        size_t nElementCount = (__SIZE) / sizeof(__TYPE_T);                     \
                                                                                 \
         size_t nStrideSize = (__STRIDE);                                        \
         size_t nLineCount = 0;                                                  \
