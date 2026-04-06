@@ -92,7 +92,7 @@ int main(void) {
     //sve_tester((uint32_t *)pchSource, (uint32_t *)pchTarget, OUTPUT_BUFFER_SIZE / sizeof(uint32_t));
 #endif
 
-    __arm_2d_sve_cccn888_fill_colour_with_opacity((uint32_t *)pchTarget, 128, 0x00, 128);
+    __arm_2d_sve_cccn888_fill_colour_with_source_masks((uint32_t *)pchTarget, pchMask, pchMask, 17, 0x00804020);
 
     SVT_PRINT_BUFFER(pchSource, uint8_t, "%02"PRIx8, 64);
     SVT_PRINT_BUFFER(pchTarget, uint8_t, "%02"PRIx8, 64);
