@@ -48,22 +48,64 @@
                                                     __target_u16x4,             \
                                                     ...)                        \
         do {                                                                    \
+            const uint8_t __chn_idx__ = 0;                                      \
+            (void)__chn_idx__;                                                  \
             svuint16_t __svu16_source__ = svget4((__source_u16x4), 0);          \
             svuint16_t __svu16_target__ = svget4((__target_u16x4), 0);          \
             __VA_ARGS__                                                         \
             __target_u16x4 = svset4(__target_u16x4, 0, __svu16_target__);       \
         } while(0);                                                             \
         do {                                                                    \
+            const uint8_t __chn_idx__ = 1;                                      \
+            (void)__chn_idx__;                                                  \
             svuint16_t __svu16_source__ = svget4((__source_u16x4), 1);          \
             svuint16_t __svu16_target__ = svget4((__target_u16x4), 1);          \
             __VA_ARGS__                                                         \
             __target_u16x4 = svset4(__target_u16x4, 1, __svu16_target__);       \
         } while(0);                                                             \
         do {                                                                    \
+            const uint8_t __chn_idx__ = 2;                                      \
+            (void)__chn_idx__;                                                  \
             svuint16_t __svu16_source__ = svget4((__source_u16x4), 2);          \
             svuint16_t __svu16_target__ = svget4((__target_u16x4), 2);          \
             __VA_ARGS__                                                         \
             __target_u16x4 = svset4(__target_u16x4, 2, __svu16_target__);       \
+        } while(0)
+
+#define __arm_2d_sve_stride_ccca_foreach_chn__( __source_u16x4,                 \
+                                                __target_u16x4,                 \
+                                                ...)                            \
+        do {                                                                    \
+            const uint8_t __chn_idx__ = 0;                                      \
+            (void)__chn_idx__;                                                  \
+            svuint16_t __svu16_source__ = svget4((__source_u16x4), 0);          \
+            svuint16_t __svu16_target__ = svget4((__target_u16x4), 0);          \
+            __VA_ARGS__                                                         \
+            __target_u16x4 = svset4(__target_u16x4, 0, __svu16_target__);       \
+        } while(0);                                                             \
+        do {                                                                    \
+            const uint8_t __chn_idx__ = 1;                                      \
+            (void)__chn_idx__;                                                  \
+            svuint16_t __svu16_source__ = svget4((__source_u16x4), 1);          \
+            svuint16_t __svu16_target__ = svget4((__target_u16x4), 1);          \
+            __VA_ARGS__                                                         \
+            __target_u16x4 = svset4(__target_u16x4, 1, __svu16_target__);       \
+        } while(0);                                                             \
+        do {                                                                    \
+            const uint8_t __chn_idx__ = 2;                                      \
+            (void)__chn_idx__;                                                  \
+            svuint16_t __svu16_source__ = svget4((__source_u16x4), 2);          \
+            svuint16_t __svu16_target__ = svget4((__target_u16x4), 2);          \
+            __VA_ARGS__                                                         \
+            __target_u16x4 = svset4(__target_u16x4, 2, __svu16_target__);       \
+        } while(0);                                                             \
+        do {                                                                    \
+            const uint8_t __chn_idx__ = 3;                                      \
+            (void)__chn_idx__;                                                  \
+            svuint16_t __svu16_source__ = svget4((__source_u16x4), 3);          \
+            svuint16_t __svu16_target__ = svget4((__target_u16x4), 3);          \
+            __VA_ARGS__                                                         \
+            __target_u16x4 = svset4(__target_u16x4, 3, __svu16_target__);       \
         } while(0)
 
 __STATIC_INLINE

@@ -14,6 +14,7 @@
 __attribute__((nonnull(1,2)))
 void sve_tester(uint32_t * __restrict pwSource, 
                 uint32_t * __restrict pwTarget, 
+                uint8_t * __restrict pchSourceMask,
                 size_t uStride);
 
 int main(void) {
@@ -73,9 +74,17 @@ int main(void) {
     assert(NULL != pchTarget);
     memset(pchTarget, 0xFF, OUTPUT_BUFFER_SIZE);
 
-    uint8_t *pchMask = (uint8_t *)malloc(MASK_SIZE);
-    assert(NULL != pchMask);
-    memset(pchMask, 0xFF, MASK_SIZE);
+    uint8_t *pchSourceMask = (uint8_t *)malloc(MASK_SIZE);
+    assert(NULL != pchSourceMask);
+    for (size_t n = 0; n < PIXEL_COUNT; n++) {
+        pchSourceMask[n] = n & 0xFF;
+    }
+
+    uint8_t *pchTargetMask = (uint8_t *)malloc(MASK_SIZE);
+    assert(NULL != pchTargetMask);
+    for (size_t n = 0; n < PIXEL_COUNT; n++) {
+        pchTargetMask[n] = 0xFF;
+    }
 
 #if 0
     __arm_2d_sve_cccn888_blend_with_opacity((uint32_t *)pchSource, 
@@ -89,10 +98,14 @@ int main(void) {
                                             pchMask,
                                             pchMask,
                                             OUTPUT_BUFFER_SIZE / sizeof(uint32_t));
-    //sve_tester((uint32_t *)pchSource, (uint32_t *)pchTarget, OUTPUT_BUFFER_SIZE / sizeof(uint32_t));
-#endif
 
     __arm_2d_sve_cccn888_fill_colour_with_source_masks((uint32_t *)pchTarget, pchMask, pchMask, 17, 0x00804020);
+    
+#endif
+    __arm_2d_sve_cccn888_reverse_fill_colour_with_masks((uint32_t *)pchTarget, pchSourceMask + MASK_SIZE - 1, pchTargetMask, MASK_SIZE, 0x00000000);
+    //sve_tester((uint32_t *)pchSource + 20 - 1, (uint32_t *)pchTarget, pchMask + 20 - 1, 20);
+
+
 
     SVT_PRINT_BUFFER(pchSource, uint8_t, "%02"PRIx8, 64);
     SVT_PRINT_BUFFER(pchTarget, uint8_t, "%02"PRIx8, 64);
@@ -100,7 +113,8 @@ int main(void) {
     
     free(pchSource);
     free(pchTarget);
-    free(pchMask);
+    free(pchSourceMask);
+    free(pchTargetMask);
 
     return 0;
 }
@@ -108,11 +122,25 @@ int main(void) {
 __attribute__((nonnull(1,2)))
 void sve_tester(uint32_t * __restrict pwSource, 
                 uint32_t * __restrict pwTarget, 
+                uint8_t * __restrict pchSourceMask,
                 size_t uStride)
 {
 
 #if 1
+
+    /* generate one-pass address */
+    pwSource += 1;
+    pchSourceMask += 1;
+
     __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred){
+
+        svbool_t vTailPredRev = svrev_b8(vTailPred);
+
+        SVT_PRINT_PRED(vTailPred, uint8_t);
+        SVT_PRINT_PRED(vTailPredRev, uint8_t);
+
+        pwSource -= __iteration_advance__;
+        pchSourceMask -= __iteration_advance__;
 
         svuint16x4_t vSourceLow16x4 = svundef4_u16();
         svuint16x4_t vSourceHigh16x4 = svundef4_u16();
@@ -120,33 +148,50 @@ void sve_tester(uint32_t * __restrict pwSource,
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, (uint8_t *)pwSource, &vSourceLow16x4, &vSourceHigh16x4);
+        svld4u8_u16(vTailPredRev, (uint8_t *)pwSource, &vSourceLow16x4, &vSourceHigh16x4);
         svld4u8_u16(vTailPred, (uint8_t *)pwTarget, &vTargetLow16x4, &vTargetHigh16x4);
 
-        /* process low half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(vSourceLow16x4, vTargetLow16x4,
-            svuint16_t vAlpha = svget4(vSourceLow16x4, 3);
+        svuint8_t vu8SourceMask = svld1_u8(vTailPredRev, pchSourceMask);
 
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_mask( __svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vAlpha);
+        SVT_PRINT_VECTOR(vu8SourceMask, uint8_t, "0x%02"PRIx8);
+
+        svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
+
+        /* process low half */
+        __arm_2d_sve_stride_ccca_foreach_chn__(vSourceHigh16x4, vTargetLow16x4,
+
+            if (__chn_idx__ == 3) {
+                SVT_PRINT_VECTOR(svrev(vSourceMaskHigh), uint16_t, "0x%04"PRIx16);
+                __svu16_target__ = vSourceMaskHigh;
+            } else {
+                SVT_PRINT_VECTOR(__svu16_source__, uint16_t, "0x%04"PRIx16);
+                __svu16_source__ = svrev(__svu16_source__);
+                
+
+                __svu16_target__ = __svu16_source__;
+            }
 
         );
 
         /* process high half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(vSourceHigh16x4, vTargetHigh16x4,
-            svuint16_t vAlpha = svget4(vSourceHigh16x4, 3);
+        svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
 
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_mask( __svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vAlpha);
+        __arm_2d_sve_stride_ccca_foreach_chn__(vSourceLow16x4, vTargetHigh16x4,
+
+            if (__chn_idx__ == 3) {
+                __svu16_target__ = vSourceMaskLow;
+                SVT_PRINT_VECTOR(svrev(vSourceMaskLow), uint16_t, "0x%04"PRIx16);
+            } else {
+                SVT_PRINT_VECTOR(__svu16_source__, uint16_t, "0x%04"PRIx16);
+                __svu16_source__ = svrev(__svu16_source__);
+                
+
+                __svu16_target__ = __svu16_source__;
+            }
         );
 
         svst4u8_u16(vTailPred, (uint8_t *)pwTarget, &vTargetLow16x4, &vTargetHigh16x4);
 
-        pwSource += __iteration_advance__;
         pwTarget += __iteration_advance__;
     }
 
