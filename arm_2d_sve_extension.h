@@ -110,7 +110,7 @@
 
 __STATIC_INLINE
 ARM_NONNULL(2,3,4)
-void svld4u8_u16(   svbool_t vPred, 
+void svld4ub_u16(   svbool_t vPred, 
                     uint8_t *pchSource, 
                     svuint16x4_t *pvLow, 
                     svuint16x4_t *pvHigh )
@@ -130,7 +130,7 @@ void svld4u8_u16(   svbool_t vPred,
 
 __STATIC_INLINE
 ARM_NONNULL(2,3,4)
-void svst4u8_u16(   svbool_t vPred, 
+void svst4ub_u16(   svbool_t vPred, 
                     uint8_t *pchTarget, 
                     svuint16x4_t *pvLow, 
                     svuint16x4_t *pvHigh)

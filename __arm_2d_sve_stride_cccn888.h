@@ -38,7 +38,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_opacity(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -70,7 +70,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_opacity(
                                                         hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -93,7 +93,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -129,7 +129,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask(
                                                     vMaskHigh);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -154,7 +154,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask_and_opacity(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -194,7 +194,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask_and_opacity(
                                                     hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -218,7 +218,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -259,7 +259,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks(
                                                     vTargetMaskHigh);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -285,7 +285,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks_and_opacity(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -330,7 +330,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks_and_opacity(
                                                     hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -362,7 +362,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -400,7 +400,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask(
                                                     vMaskLow);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -427,7 +427,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask_and_opacity(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -469,7 +469,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask_and_opacity(
                                                     hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -495,7 +495,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -537,7 +537,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks(
                                                     vTargetMaskHigh);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -565,7 +565,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks_and_opacity(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -611,7 +611,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks_and_opacity(
                                                     hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -637,12 +637,12 @@ void __arm_2d_sve_cccn888_blend(uint32_t * __RESTRICT pwSource,
         svuint16x4_t vSourceLow16x4 = svundef4_u16();
         svuint16x4_t vSourceHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
@@ -667,12 +667,12 @@ void __arm_2d_sve_cccn888_blend_with_opacity(   uint32_t * __RESTRICT pwSource,
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -698,7 +698,7 @@ void __arm_2d_sve_cccn888_blend_with_opacity(   uint32_t * __RESTRICT pwSource,
                                                         hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -723,12 +723,12 @@ void __arm_2d_sve_cccn888_blend_with_source_mask(uint32_t * __RESTRICT pwSource,
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -759,7 +759,7 @@ void __arm_2d_sve_cccn888_blend_with_source_mask(uint32_t * __RESTRICT pwSource,
                                                     vMaskHigh);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -796,12 +796,12 @@ void __arm_2d_sve_cccn888_blend_with_source_mask_and_opacity(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -834,7 +834,7 @@ void __arm_2d_sve_cccn888_blend_with_source_mask_and_opacity(
                                                             hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -874,12 +874,12 @@ void __arm_2d_sve_cccn888_blend_with_masks( uint32_t * __RESTRICT pwSource,
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -914,7 +914,7 @@ void __arm_2d_sve_cccn888_blend_with_masks( uint32_t * __RESTRICT pwSource,
                                                     vTargetMaskHigh);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -945,12 +945,12 @@ void __arm_2d_sve_cccn888_blend_with_masks_and_opacity(
         svuint16x4_t vTargetLow16x4 = svundef4_u16();
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -990,7 +990,7 @@ void __arm_2d_sve_cccn888_blend_with_masks_and_opacity(
                                                             hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1028,7 +1028,7 @@ void __arm_2d_sve_cccn888_reverse_blend(uint32_t * __RESTRICT pwSource,
 
         pwSource -= __iteration_advance__;
 
-        svld4u8_u16(vTailPredRev, 
+        svld4ub_u16(vTailPredRev, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
@@ -1045,7 +1045,7 @@ void __arm_2d_sve_cccn888_reverse_blend(uint32_t * __RESTRICT pwSource,
             __svu16_target__ = svrev(__svu16_source__);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1077,12 +1077,12 @@ void __arm_2d_sve_cccn888_reverse_blend_with_opacity(
 
         pwSource -= __iteration_advance__;
 
-        svld4u8_u16(vTailPredRev, 
+        svld4ub_u16(vTailPredRev, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1108,7 +1108,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_opacity(
                                                         hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1140,12 +1140,12 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask(
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
         pwSource -= __iteration_advance__;
-        svld4u8_u16(vTailPredRev, 
+        svld4ub_u16(vTailPredRev, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1176,7 +1176,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask(
                                                     vSourceMaskLow);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1209,12 +1209,12 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask_and_opacity(
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
         pwSource -= __iteration_advance__;
-        svld4u8_u16(vTailPredRev, 
+        svld4ub_u16(vTailPredRev, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1249,7 +1249,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask_and_opacity(
                                                     hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1280,12 +1280,12 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask(
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
         pwSource -= __iteration_advance__;
-        svld4u8_u16(vTailPredRev, 
+        svld4ub_u16(vTailPredRev, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1315,7 +1315,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask(
                                                     vTargetMaskHigh);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1348,12 +1348,12 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask_and_opacity(
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
         pwSource -= __iteration_advance__;
-        svld4u8_u16(vTailPredRev, 
+        svld4ub_u16(vTailPredRev, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1387,7 +1387,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask_and_opacity(
                                                     hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1421,12 +1421,12 @@ void __arm_2d_sve_cccn888_reverse_blend_with_masks(
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
         pwSource -= __iteration_advance__;
-        svld4u8_u16(vTailPredRev, 
+        svld4ub_u16(vTailPredRev, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1462,7 +1462,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_masks(
                                                     vTargetMaskHigh);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1498,12 +1498,12 @@ void __arm_2d_sve_cccn888_reverse_blend_with_masks_and_opacity(
         svuint16x4_t vTargetHigh16x4 = svundef4_u16();
 
         pwSource -= __iteration_advance__;
-        svld4u8_u16(vTailPredRev, 
+        svld4ub_u16(vTailPredRev, 
                     (uint8_t *)pwSource, 
                     &vSourceLow16x4, 
                     &vSourceHigh16x4);
 
-        svld4u8_u16(vTailPred, 
+        svld4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
@@ -1543,7 +1543,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_masks_and_opacity(
                                                     hwOpacity);
         );
 
-        svst4u8_u16(vTailPred, 
+        svst4ub_u16(vTailPred, 
                     (uint8_t *)pwTarget, 
                     &vTargetLow16x4, 
                     &vTargetHigh16x4);
