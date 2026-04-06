@@ -632,24 +632,18 @@ void __arm_2d_sve_cccn888_blend(uint32_t * __RESTRICT pwSource,
                                 uint32_t * __RESTRICT pwTarget,
                                 size_t uStride)
 {
-    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred) {
+    size_t n = 0;
 
-        svuint16x4_t vSourceLow16x4 = svundef4_u16();
-        svuint16x4_t vSourceHigh16x4 = svundef4_u16();
-
-        svld4ub_u16(vTailPred, 
-                    (uint8_t *)pwSource, 
-                    &vSourceLow16x4, 
-                    &vSourceHigh16x4);
-
-        svst4ub_u16(vTailPred, 
-                    (uint8_t *)pwTarget, 
-                    &vSourceLow16x4, 
-                    &vSourceHigh16x4);
-
-        pwSource += __iteration_advance__;
-        pwTarget += __iteration_advance__;
-    }
+    do {
+        svbool_t vTailPred = svwhilelt_b32(n, uStride);
+        
+        svst1_u32(  vTailPred, 
+                    pwTarget, 
+                    svld1_u32(vTailPred, pwSource));
+        
+        pwTarget += svlenu32();
+        n += svlenu32();
+    } while(n < uStride);
 }
 
 __STATIC_INLINE
