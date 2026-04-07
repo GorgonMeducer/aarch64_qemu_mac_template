@@ -60,6 +60,48 @@
                 });                                                             \
                 PERFC_SAFE_NAME(n) += __iteration_advance__)
 
+#define __arm_2d_sve_stride_loop_rgb32__(__stride_size, __pred_name)            \
+            __arm_2d_sve_stride_loop_ccca8888__(__stride_size, __pred_name)
+
+#define __arm_2d_sve_stride_loop_rgb16__(__stride_size, __pred_name)            \
+    for (   svbool_t __pred_name, *pTemp = &__pred_name;                        \
+            pTemp != NULL;                                                      \
+            pTemp = NULL)                                                       \
+        for (   size_t PERFC_SAFE_NAME(n) = 0,                                  \
+                __iteration_advance__ = svlenu16();                             \
+                ({  __pred_name = svwhilelt_b16(PERFC_SAFE_NAME(n),             \
+                                                (__stride_size));               \
+                    PERFC_SAFE_NAME(n) < (__stride_size);                       \
+                });                                                             \
+                PERFC_SAFE_NAME(n) += __iteration_advance__)
+
+#define __arm_2d_sve_stride_ccc_foreach_chn__(  __source_u16x3,                 \
+                                                __target_u16x3,                 \
+                                                ...)                            \
+        do {                                                                    \
+            const uint8_t __chn_idx__ = 0;                                      \
+            (void)__chn_idx__;                                                  \
+            svuint16_t __svu16_source__ = svget3((__source_u16x3), 0);          \
+            svuint16_t __svu16_target__ = svget3((__target_u16x3), 0);          \
+            __VA_ARGS__                                                         \
+            __target_u16x3 = svset3(__target_u16x3, 0, __svu16_target__);       \
+        } while(0);                                                             \
+        do {                                                                    \
+            const uint8_t __chn_idx__ = 1;                                      \
+            (void)__chn_idx__;                                                  \
+            svuint16_t __svu16_source__ = svget3((__source_u16x3), 1);          \
+            svuint16_t __svu16_target__ = svget3((__target_u16x3), 1);          \
+            __VA_ARGS__                                                         \
+            __target_u16x3 = svset3(__target_u16x3, 1, __svu16_target__);       \
+        } while(0);                                                             \
+        do {                                                                    \
+            const uint8_t __chn_idx__ = 2;                                      \
+            (void)__chn_idx__;                                                  \
+            svuint16_t __svu16_source__ = svget3((__source_u16x3), 2);          \
+            svuint16_t __svu16_target__ = svget3((__target_u16x3), 2);          \
+            __VA_ARGS__                                                         \
+            __target_u16x3 = svset3(__target_u16x3, 2, __svu16_target__);       \
+        } while(0);                                                             \
 
 #define __arm_2d_sve_stride_ccca_foreach_chn012__(  __source_u16x4,             \
                                                     __target_u16x4,             \
@@ -124,6 +166,32 @@
             __VA_ARGS__                                                         \
             __target_u16x4 = svset4(__target_u16x4, 3, __svu16_target__);       \
         } while(0)
+
+
+__STATIC_INLINE
+svuint16x3_t __arm_2d_sve_rgb565_unpack(svuint16_t vPixels)
+{
+    svuint16x3_t vRGB16x3 = svundef3_u16();
+
+    /* extract and zero-exten blue channel */
+    vRGB16x3 = svset3_u16(vRGB16x3, 0, (vPixels & 0x1F) << 3);
+
+    /* extract and zero-exten green channel */
+    vRGB16x3 = svset3_u16(vRGB16x3, 1, (vPixels & (0x3F << 5)) >> 3);
+
+    /* extract and zero-exten green channel */
+    vRGB16x3 = svset3_u16(vRGB16x3, 2, (vPixels & (0x1F << 11)) >> 8);
+
+    return vRGB16x3;
+}
+
+__STATIC_INLINE
+svuint16_t __arm_2d_sve_rgb565_pack(svuint16x3_t vRGB16x3)
+{
+    return  (svget3_u16(vRGB16x3, 0) >> 3)
+        |   ((svget3_u16(vRGB16x3, 1) & (0x3F << 2)) << 3)
+        |   ((svget3_u16(vRGB16x3, 2) & (0x1F << 3)) << 8);
+}
 
 __STATIC_INLINE
 ARM_NONNULL(2,3,4)
@@ -261,7 +329,7 @@ svuint16_t __arm_2d_sve_chn_blend_with_masks_and_opacity(
 }
 
 
-
+#include "__arm_2d_sve_stride_rgb565.h"
 #include "__arm_2d_sve_stride_cccn888.h"
 
 #endif
