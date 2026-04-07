@@ -659,6 +659,7 @@ void __arm_2d_sve_cccn888_blend(uint32_t * __RESTRICT pwSource,
                     svld1_u32(vTailPred, pwSource));
         
         pwTarget += svlenu32();
+        pwSource += svlenu32();
         n += svlenu32();
     } while(n < uStride);
 }
