@@ -225,7 +225,7 @@ void __arm_2d_sve_rgb565_fill_colour_with_masks_and_opacity(
     }
 }
 
-#if 0
+
 
 /*----------------------------------------------------------------------------*
  * Colour Filling with X Mirroring                                            *
@@ -234,200 +234,123 @@ void __arm_2d_sve_rgb565_fill_colour_with_masks_and_opacity(
 __STATIC_INLINE
 ARM_NONNULL(1)
 void __arm_2d_sve_rgb565_reverse_fill_colour_with_source_mask(   
-                                                uint16_t * __RESTRICT pwTarget,
-                                                uint8_t * __RESTRICT pchMask,
+                                                uint16_t * __RESTRICT phwTarget,
+                                                uint8_t * __RESTRICT pchSourceMask,
                                                 size_t uStride,
-                                                uint16_t wColour)
+                                                uint16_t hwColour)
 {
-    /* generate one-pass address */
-    pchMask += 1;
+    /* generate the one-pass address */
+    pchSourceMask += 1;
 
-    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred) {
+    __arm_2d_sve_stride_loop_rgb16__(uStride, vTailPred) {
 
-        svuint16x4_t vTargetLow16x4 = svundef4_u16();
-        svuint16x4_t vTargetHigh16x4 = svundef4_u16();
+        svuint16x3_t tColour16x3 = 
+            __arm_2d_sve_rgb565_unpack(svdup_u16(hwColour));
+        svuint16x3_t vTarget16x3 = 
+            __arm_2d_sve_rgb565_unpack(svld1_u16(vTailPred, phwTarget));
+        
+        pchSourceMask -= __iteration_advance__;
+        svuint16_t vSourceMask = 
+            svrev(svld1ub_u16(svrev_b16(vTailPred), pchSourceMask));
 
-        svld4ub_u16(vTailPred, 
-                    (uint8_t *)pwTarget, 
-                    &vTargetLow16x4, 
-                    &vTargetHigh16x4);
-
-        pchMask -= __iteration_advance__;
-        svuint8_t vu8Mask = svld1_u8(svrev_b8(vTailPred), pchMask);
-
-        svuint16x4_t vColour16x4 = svcreate4_u16(
-                                        svdup_u16( ((uint8_t *)&wColour)[0]),
-                                        svdup_u16( ((uint8_t *)&wColour)[1]),
-                                        svdup_u16( ((uint8_t *)&wColour)[2]),
-                                        svdup_u16( ((uint8_t *)&wColour)[3]));
-
-        /* process low half */
-        svuint16_t vMaskHigh = svrev(svunpkhi_u16(vu8Mask));
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
-                                                    vTargetLow16x4,
-
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_mask( __svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vMaskHigh);
-
+        __arm_2d_sve_stride_ccc_foreach_chn__(  tColour16x3,
+                                                vTarget16x3,
+            __svu16_target__ = __arm_2d_sve_chn_blend_with_mask(
+                                                    __svu16_source__,
+                                                    __svu16_target__,
+                                                    vSourceMask);
         );
 
-        /* process high half */
-        svuint16_t vMaskLow = svrev(svunpklo_u16(vu8Mask));
+        svst1_u16(  vTailPred, 
+                    phwTarget, 
+                    __arm_2d_sve_rgb565_pack(vTarget16x3));
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
-                                                    vTargetHigh16x4,
-
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_mask( __svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vMaskLow);
-        );
-
-        svst4ub_u16(vTailPred, 
-                    (uint8_t *)pwTarget, 
-                    &vTargetLow16x4, 
-                    &vTargetHigh16x4);
-
-        pwTarget += __iteration_advance__;
+        phwTarget += __iteration_advance__;
     }
 }
+
 
 
 __STATIC_INLINE
 ARM_NONNULL(1)
 void __arm_2d_sve_rgb565_reverse_fill_colour_with_source_mask_and_opacity(   
-                                                uint16_t * __RESTRICT pwTarget,
-                                                uint8_t * __RESTRICT pchMask,
+                                                uint16_t * __RESTRICT phwTarget,
+                                                uint8_t * __RESTRICT pchSourceMask,
                                                 size_t uStride,
-                                                uint16_t wColour,
+                                                uint16_t hwColour,
                                                 uint16_t hwOpacity)
 {
-    /* generate one-pass address */
-    pchMask += 1;
+    /* generate the one-pass address */
+    pchSourceMask += 1;
 
-    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred) {
+    __arm_2d_sve_stride_loop_rgb16__(uStride, vTailPred) {
 
-        svuint16x4_t vTargetLow16x4 = svundef4_u16();
-        svuint16x4_t vTargetHigh16x4 = svundef4_u16();
+        svuint16x3_t tColour16x3 = 
+            __arm_2d_sve_rgb565_unpack(svdup_u16(hwColour));
+        svuint16x3_t vTarget16x3 = 
+            __arm_2d_sve_rgb565_unpack(svld1_u16(vTailPred, phwTarget));
+        
+        pchSourceMask -= __iteration_advance__;
+        svuint16_t vSourceMask = 
+            svrev(svld1ub_u16(svrev_b16(vTailPred), pchSourceMask));
 
-        svld4ub_u16(vTailPred, 
-                    (uint8_t *)pwTarget, 
-                    &vTargetLow16x4, 
-                    &vTargetHigh16x4);
-
-        pchMask -= __iteration_advance__;
-        svuint8_t vu8Mask = svld1_u8(svrev_b8(vTailPred), pchMask);
-
-        svuint16x4_t vColour16x4 = svcreate4_u16(
-                                        svdup_u16( ((uint8_t *)&wColour)[0]),
-                                        svdup_u16( ((uint8_t *)&wColour)[1]),
-                                        svdup_u16( ((uint8_t *)&wColour)[2]),
-                                        svdup_u16( ((uint8_t *)&wColour)[3]));
-
-        /* process low half */
-        svuint16_t vMaskHigh = svrev(svunpkhi_u16(vu8Mask));
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
-                                                    vTargetLow16x4,
-
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_mask_and_opacity( 
-                                                    __svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vMaskHigh,
-                                                    hwOpacity);
-
+        __arm_2d_sve_stride_ccc_foreach_chn__(  tColour16x3,
+                                                vTarget16x3,
+            __svu16_target__ = __arm_2d_sve_chn_blend_with_mask_and_opacity(
+                                                            __svu16_source__,
+                                                            __svu16_target__,
+                                                            vSourceMask,
+                                                            hwOpacity);
         );
 
-        /* process high half */
-        svuint16_t vMaskLow = svrev(svunpklo_u16(vu8Mask));
+        svst1_u16(  vTailPred, 
+                    phwTarget, 
+                    __arm_2d_sve_rgb565_pack(vTarget16x3));
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
-                                                    vTargetHigh16x4,
-
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_mask_and_opacity( 
-                                                    __svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vMaskLow,
-                                                    hwOpacity);
-        );
-
-        svst4ub_u16(vTailPred, 
-                    (uint8_t *)pwTarget, 
-                    &vTargetLow16x4, 
-                    &vTargetHigh16x4);
-
-        pwTarget += __iteration_advance__;
+        phwTarget += __iteration_advance__;
     }
 }
+
+
 
 __STATIC_INLINE
 ARM_NONNULL(1)
 void __arm_2d_sve_rgb565_reverse_fill_colour_with_masks(   
-                                            uint16_t * __RESTRICT pwTarget,
+                                            uint16_t * __RESTRICT phwTarget,
                                             uint8_t * __RESTRICT pchSourceMask,
                                             uint8_t * __RESTRICT pchTargetMask,
                                             size_t uStride,
-                                            uint16_t wColour)
+                                            uint16_t hwColour)
 {
-    /* generate the one pass address for the source mask only */
+    /* generate the one-pass address */
     pchSourceMask += 1;
 
-    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred) {
+    __arm_2d_sve_stride_loop_rgb16__(uStride, vTailPred) {
 
-        svuint16x4_t vTargetLow16x4 = svundef4_u16();
-        svuint16x4_t vTargetHigh16x4 = svundef4_u16();
-
-        svld4ub_u16(vTailPred, 
-                    (uint8_t *)pwTarget, 
-                    &vTargetLow16x4, 
-                    &vTargetHigh16x4);
-
+        svuint16x3_t tColour16x3 = 
+            __arm_2d_sve_rgb565_unpack(svdup_u16(hwColour));
+        svuint16x3_t vTarget16x3 = 
+            __arm_2d_sve_rgb565_unpack(svld1_u16(vTailPred, phwTarget));
+        
         pchSourceMask -= __iteration_advance__;
-        svuint8_t vu8SourceMask = svld1_u8(svrev_b8(vTailPred), pchSourceMask);
-        svuint8_t vu8TargetMask = svld1_u8(vTailPred, pchTargetMask);
-        svuint16x4_t vColour16x4 = svcreate4_u16(
-                                        svdup_u16( ((uint8_t *)&wColour)[0]),
-                                        svdup_u16( ((uint8_t *)&wColour)[1]),
-                                        svdup_u16( ((uint8_t *)&wColour)[2]),
-                                        svdup_u16( ((uint8_t *)&wColour)[3]));
+        svuint16_t vSourceMask = 
+            svrev(svld1ub_u16(svrev_b16(vTailPred), pchSourceMask));
+        svuint16_t vTargetMask = svld1ub_u16(vTailPred, pchSourceMask);
 
-        /* process low half */
-        svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
-        svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
-                                                    vTargetLow16x4,
-
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_masks(__svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vSourceMaskHigh,
-                                                    vTargetMaskLow);
-
+        __arm_2d_sve_stride_ccc_foreach_chn__(  tColour16x3,
+                                                vTarget16x3,
+            __svu16_target__ = __arm_2d_sve_chn_blend_with_masks(
+                                                            __svu16_source__,
+                                                            __svu16_target__,
+                                                            vSourceMask,
+                                                            vTargetMask);
         );
 
-        /* process high half */
-        svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
-        svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
+        svst1_u16(  vTailPred, 
+                    phwTarget, 
+                    __arm_2d_sve_rgb565_pack(vTarget16x3));
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
-                                                    vTargetHigh16x4,
-
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_masks(__svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vSourceMaskLow,
-                                                    vTargetMaskHigh);
-        );
-
-        svst4ub_u16(vTailPred, 
-                    (uint8_t *)pwTarget, 
-                    &vTargetLow16x4, 
-                    &vTargetHigh16x4);
-
-        pwTarget += __iteration_advance__;
+        phwTarget += __iteration_advance__;
         pchTargetMask += __iteration_advance__;
     }
 }
@@ -435,76 +358,48 @@ void __arm_2d_sve_rgb565_reverse_fill_colour_with_masks(
 __STATIC_INLINE
 ARM_NONNULL(1)
 void __arm_2d_sve_rgb565_reverse_fill_colour_with_masks_and_opacity(   
-                                            uint16_t * __RESTRICT pwTarget,
+                                            uint16_t * __RESTRICT phwTarget,
                                             uint8_t * __RESTRICT pchSourceMask,
                                             uint8_t * __RESTRICT pchTargetMask,
                                             size_t uStride,
-                                            uint16_t wColour,
+                                            uint16_t hwColour,
                                             uint16_t hwOpacity)
 {
-    /* generate the one pass address for the source mask only */
+    /* generate the one-pass address */
     pchSourceMask += 1;
 
-    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred) {
+    __arm_2d_sve_stride_loop_rgb16__(uStride, vTailPred) {
 
-        svuint16x4_t vTargetLow16x4 = svundef4_u16();
-        svuint16x4_t vTargetHigh16x4 = svundef4_u16();
-
-        svld4ub_u16(vTailPred, 
-                    (uint8_t *)pwTarget, 
-                    &vTargetLow16x4, 
-                    &vTargetHigh16x4);
-
+        svuint16x3_t tColour16x3 = 
+            __arm_2d_sve_rgb565_unpack(svdup_u16(hwColour));
+        svuint16x3_t vTarget16x3 = 
+            __arm_2d_sve_rgb565_unpack(svld1_u16(vTailPred, phwTarget));
+        
         pchSourceMask -= __iteration_advance__;
-        svuint8_t vu8SourceMask = svld1_u8(svrev_b8(vTailPred), pchSourceMask);
-        svuint8_t vu8TargetMask = svld1_u8(vTailPred, pchTargetMask);
-        svuint16x4_t vColour16x4 = svcreate4_u16(
-                                        svdup_u16( ((uint8_t *)&wColour)[0]),
-                                        svdup_u16( ((uint8_t *)&wColour)[1]),
-                                        svdup_u16( ((uint8_t *)&wColour)[2]),
-                                        svdup_u16( ((uint8_t *)&wColour)[3]));
+        svuint16_t vSourceMask = 
+            svrev(svld1ub_u16(svrev_b16(vTailPred), pchSourceMask));
+        svuint16_t vTargetMask = svld1ub_u16(vTailPred, pchSourceMask);
 
-        /* process low half */
-        svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
-        svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
-                                                    vTargetLow16x4,
-
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_masks_and_opacity( 
-                                                    __svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vSourceMaskHigh,
-                                                    vTargetMaskLow,
-                                                    hwOpacity);
-
+        __arm_2d_sve_stride_ccc_foreach_chn__(  tColour16x3,
+                                                vTarget16x3,
+            __svu16_target__ = __arm_2d_sve_chn_blend_with_masks_and_opacity(
+                                                            __svu16_source__,
+                                                            __svu16_target__,
+                                                            vSourceMask,
+                                                            vTargetMask,
+                                                            hwOpacity);
         );
 
-        /* process high half */
-        svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
-        svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
+        svst1_u16(  vTailPred, 
+                    phwTarget, 
+                    __arm_2d_sve_rgb565_pack(vTarget16x3));
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
-                                                    vTargetHigh16x4,
-
-            __svu16_target__ 
-                = __arm_2d_sve_chn_blend_with_masks_and_opacity( 
-                                                    __svu16_source__, 
-                                                    __svu16_target__, 
-                                                    vSourceMaskLow,
-                                                    vTargetMaskHigh,
-                                                    hwOpacity);
-        );
-
-        svst4ub_u16(vTailPred, 
-                    (uint8_t *)pwTarget, 
-                    &vTargetLow16x4, 
-                    &vTargetHigh16x4);
-
-        pwTarget += __iteration_advance__;
+        phwTarget += __iteration_advance__;
         pchTargetMask += __iteration_advance__;
     }
 }
+
+#if 0
 
 /*----------------------------------------------------------------------------*
  * Blending                                                                   *

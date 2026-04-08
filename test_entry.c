@@ -77,7 +77,7 @@ int main(void) {
     uint8_t *pchSourceMask = (uint8_t *)malloc(MASK_SIZE);
     assert(NULL != pchSourceMask);
     for (size_t n = 0; n < PIXEL_COUNT; n++) {
-        pchSourceMask[n] = 0xFF;
+        pchSourceMask[n] = n;
     }
 
     uint8_t *pchTargetMask = (uint8_t *)malloc(MASK_SIZE);
@@ -101,19 +101,28 @@ int main(void) {
 
     __arm_2d_sve_cccn888_fill_colour_with_source_masks((uint32_t *)pchTarget, pchMask, pchMask, 17, 0x00804020);
     
-#endif
     __arm_2d_sve_cccn888_reverse_blend_with_masks(
         (uint32_t *)pchSource + PIXEL_COUNT - 1, 
         pchSourceMask + PIXEL_COUNT - 1,
         (uint32_t *)pchTarget,
         pchTargetMask,
         PIXEL_COUNT);
+#endif
+
+    __arm_2d_sve_rgb565_reverse_fill_colour_with_source_mask_and_opacity(
+        //(uint16_t *)pchSource, 
+        (uint16_t *)pchTarget,
+        pchSourceMask + 128 - 1,
+        128,
+        0x0000,
+        0x100);
+
     //sve_tester((uint32_t *)pchSource + 20 - 1, (uint32_t *)pchTarget, pchMask + 20 - 1, 20);
 
 
 
-    SVT_PRINT_BUFFER(pchSource, INPUT_BUFFER_SIZE, uint32_t, "%08"PRIx32, 16);
-    SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE, uint32_t, "%08"PRIx32, 16);
+    SVT_PRINT_BUFFER(pchSource, INPUT_BUFFER_SIZE, uint16_t, "%04"PRIx16, 16);
+    SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE, uint16_t, "%04"PRIx16, 16);
 
     
     free(pchSource);
