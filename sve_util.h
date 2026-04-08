@@ -95,6 +95,7 @@
 #define SAFE_NAME(__NAME)           PERFC_CONNECT3(__,__NAME,__LINE__)
 #define PERFC_SAFE_NAME(__name)     PERFC_CONNECT3(__,__name,__LINE__)
 
+#define ARM_2D_SAFE_NAME            PERFC_SAFE_NAME
 
 #undef __perfc_using1
 #undef __perfc_using2

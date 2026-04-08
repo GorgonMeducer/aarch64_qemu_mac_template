@@ -52,13 +52,13 @@
     for (   svbool_t __pred_name, *pTemp = &__pred_name;                        \
             pTemp != NULL;                                                      \
             pTemp = NULL)                                                       \
-        for (   size_t PERFC_SAFE_NAME(n) = 0,                                  \
+        for (   size_t ARM_2D_SAFE_NAME(n) = 0,                                 \
                 __iteration_advance__ = svlenu32() * 4;                         \
-                ({  __pred_name = svwhilelt_b8( PERFC_SAFE_NAME(n),             \
+                ({  __pred_name = svwhilelt_b8( ARM_2D_SAFE_NAME(n),            \
                                                 (__stride_size));               \
-                    PERFC_SAFE_NAME(n) < (__stride_size);                       \
+                    ARM_2D_SAFE_NAME(n) < (__stride_size);                      \
                 });                                                             \
-                PERFC_SAFE_NAME(n) += __iteration_advance__)
+                ARM_2D_SAFE_NAME(n) += __iteration_advance__)
 
 #define __arm_2d_sve_stride_loop_rgb32__(__stride_size, __pred_name)            \
             __arm_2d_sve_stride_loop_ccca8888__(__stride_size, __pred_name)
@@ -67,13 +67,13 @@
     for (   svbool_t __pred_name, *pTemp = &__pred_name;                        \
             pTemp != NULL;                                                      \
             pTemp = NULL)                                                       \
-        for (   size_t PERFC_SAFE_NAME(n) = 0,                                  \
+        for (   size_t ARM_2D_SAFE_NAME(n) = 0,                                 \
                 __iteration_advance__ = svlenu16();                             \
-                ({  __pred_name = svwhilelt_b16(PERFC_SAFE_NAME(n),             \
+                ({  __pred_name = svwhilelt_b16(ARM_2D_SAFE_NAME(n),            \
                                                 (__stride_size));               \
-                    PERFC_SAFE_NAME(n) < (__stride_size);                       \
+                    ARM_2D_SAFE_NAME(n) < (__stride_size);                      \
                 });                                                             \
-                PERFC_SAFE_NAME(n) += __iteration_advance__)
+                ARM_2D_SAFE_NAME(n) += __iteration_advance__)
 
 #define __arm_2d_sve_stride_ccc_foreach_chn__(  __source_u16x3,                 \
                                                 __target_u16x3,                 \
