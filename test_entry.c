@@ -77,13 +77,13 @@ int main(void) {
     uint8_t *pchSourceMask = (uint8_t *)malloc(MASK_SIZE);
     assert(NULL != pchSourceMask);
     for (size_t n = 0; n < PIXEL_COUNT; n++) {
-        pchSourceMask[n] = n;
+        pchSourceMask[n] = 0xFF;
     }
 
     uint8_t *pchTargetMask = (uint8_t *)malloc(MASK_SIZE);
     assert(NULL != pchTargetMask);
     for (size_t n = 0; n < PIXEL_COUNT; n++) {
-        pchTargetMask[n] = 0x80;
+        pchTargetMask[n] = 0xFF;
     }
 
 #if 0
@@ -109,13 +109,13 @@ int main(void) {
         PIXEL_COUNT);
 #endif
 
-    __arm_2d_sve_rgb565_reverse_fill_colour_with_source_mask_and_opacity(
-        //(uint16_t *)pchSource, 
+    __arm_2d_sve_rgb565_blend_with_masks_and_opacity(
+        (uint16_t *)pchSource, 
+        pchSourceMask,
         (uint16_t *)pchTarget,
-        pchSourceMask + 128 - 1,
-        128,
-        0x0000,
-        0x100);
+        pchTargetMask,
+        PIXEL_COUNT,
+        0xFF);
 
     //sve_tester((uint32_t *)pchSource + 20 - 1, (uint32_t *)pchTarget, pchMask + 20 - 1, 20);
 
