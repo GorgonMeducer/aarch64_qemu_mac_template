@@ -67,7 +67,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_opacity(
                                         svdup_u16( ((uint8_t *)&wColour)[3]));
 
         /* process low half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -78,7 +78,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_opacity(
         );
 
         /* process high half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -124,7 +124,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask(
 
         /* process low half */
         svuint16_t vMaskLow = svunpklo_u16(vu8Mask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -137,7 +137,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask(
         /* process high half */
         svuint16_t vMaskHigh = svunpkhi_u16(vu8Mask);
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -185,7 +185,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask_and_opacity(
 
         /* process low half */
         svuint16_t vMaskLow = svunpklo_u16(vu8Mask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -200,7 +200,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask_and_opacity(
         /* process high half */
         svuint16_t vMaskHigh = svunpkhi_u16(vu8Mask);
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -251,7 +251,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks(
         /* process low half */
         svuint16_t vSourceMaskLow = svunpklo_u16(vu8SourceMask);
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -266,7 +266,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks(
         svuint16_t vSourceMaskHigh = svunpkhi_u16(vu8SourceMask);
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -318,7 +318,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks_and_opacity(
         /* process low half */
         svuint16_t vSourceMaskLow = svunpklo_u16(vu8SourceMask);
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -335,7 +335,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks_and_opacity(
         svuint16_t vSourceMaskHigh = svunpkhi_u16(vu8SourceMask);
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -395,7 +395,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask(
 
         /* process low half */
         svuint16_t vMaskHigh = svrev(svunpkhi_u16(vu8Mask));
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -408,7 +408,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask(
         /* process high half */
         svuint16_t vMaskLow = svrev(svunpklo_u16(vu8Mask));
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -460,7 +460,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask_and_opacity(
 
         /* process low half */
         svuint16_t vMaskHigh = svrev(svunpkhi_u16(vu8Mask));
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -475,7 +475,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask_and_opacity(
         /* process high half */
         svuint16_t vMaskLow = svrev(svunpklo_u16(vu8Mask));
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -529,7 +529,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks(
         /* process low half */
         svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -544,7 +544,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks(
         svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -599,7 +599,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks_and_opacity(
         /* process low half */
         svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -616,7 +616,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks_and_opacity(
         svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vColour16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vColour16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -690,7 +690,7 @@ void __arm_2d_sve_cccn888_blend_with_opacity(   uint32_t * __RESTRICT pwSource,
                     &vTargetHigh16x4);
 
         /* process low half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -701,7 +701,7 @@ void __arm_2d_sve_cccn888_blend_with_opacity(   uint32_t * __RESTRICT pwSource,
         );
 
         /* process high half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -749,7 +749,7 @@ void __arm_2d_sve_cccn888_blend_with_source_mask(uint32_t * __RESTRICT pwSource,
         svuint16_t vMaskLow = svunpklo_u16(vu8Mask);
 
         /* process low half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -762,7 +762,7 @@ void __arm_2d_sve_cccn888_blend_with_source_mask(uint32_t * __RESTRICT pwSource,
         svuint16_t vMaskHigh = svunpkhi_u16(vu8Mask);
 
         /* process high half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -822,7 +822,7 @@ void __arm_2d_sve_cccn888_blend_with_source_mask_and_opacity(
         svuint16_t vMaskLow = svunpklo_u16(vu8Mask);
 
         /* process low half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -835,7 +835,7 @@ void __arm_2d_sve_cccn888_blend_with_source_mask_and_opacity(
 
         svuint16_t vMaskHigh = svunpkhi_u16(vu8Mask);
         /* process high half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -903,7 +903,7 @@ void __arm_2d_sve_cccn888_blend_with_masks( uint32_t * __RESTRICT pwSource,
         svuint16_t vSourceMaskLow = svunpklo_u16(vu8SourceMask);
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
         
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -916,7 +916,7 @@ void __arm_2d_sve_cccn888_blend_with_masks( uint32_t * __RESTRICT pwSource,
         /* process high half */
         svuint16_t vSourceMaskHigh = svunpkhi_u16(vu8SourceMask);
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -974,7 +974,7 @@ void __arm_2d_sve_cccn888_blend_with_masks_and_opacity(
         svuint16_t vSourceMaskLow = svunpklo_u16(vu8SourceMask);
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
 
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -990,7 +990,7 @@ void __arm_2d_sve_cccn888_blend_with_masks_and_opacity(
         svuint16_t vSourceMaskHigh = svunpkhi_u16(vu8SourceMask);
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
         
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -1046,13 +1046,13 @@ void __arm_2d_sve_cccn888_reverse_blend(uint32_t * __RESTRICT pwSource,
                     &vSourceHigh16x4);
 
         /* process low half */
-        __arm_2d_sve_stride_ccca_foreach_chn__( vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn__( vSourceHigh16x4, 
                                                 vTargetLow16x4,
             __svu16_target__ = svrev(__svu16_source__);
         );
 
         /* process high half */
-        __arm_2d_sve_stride_ccca_foreach_chn__( vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn__( vSourceLow16x4, 
                                                 vTargetHigh16x4,
             __svu16_target__ = svrev(__svu16_source__);
         );
@@ -1100,7 +1100,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_opacity(
                     &vTargetHigh16x4);
 
         /* process low half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -1111,7 +1111,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_opacity(
         );
 
         /* process high half */
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -1167,7 +1167,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask(
         
         /* process low half */
         svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -1179,7 +1179,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask(
 
         /* process high half */
         svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -1236,7 +1236,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask_and_opacity(
         
         /* process low half */
         svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -1250,7 +1250,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask_and_opacity(
 
         /* process high half */
         svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -1306,7 +1306,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask(
         
         /* process low half */
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -1318,7 +1318,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask(
 
         /* process high half */
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -1374,7 +1374,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask_and_opacity(
         
         /* process low half */
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -1388,7 +1388,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask_and_opacity(
 
         /* process high half */
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -1451,7 +1451,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_masks(
         svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
         
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -1464,7 +1464,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_masks(
         /* process high half */
         svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 
@@ -1528,7 +1528,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_masks_and_opacity(
         svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
         svuint16_t vTargetMaskLow = svunpklo_u16(vu8TargetMask);
         
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceHigh16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
                                                     vTargetLow16x4,
 
             __svu16_target__ 
@@ -1543,7 +1543,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_masks_and_opacity(
         /* process high half */
         svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
         svuint16_t vTargetMaskHigh = svunpkhi_u16(vu8TargetMask);
-        __arm_2d_sve_stride_ccca_foreach_chn012__(  vSourceLow16x4, 
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceLow16x4, 
                                                     vTargetHigh16x4,
 
             __svu16_target__ 

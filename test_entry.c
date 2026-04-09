@@ -77,7 +77,7 @@ int main(void) {
     uint8_t *pchSourceMask = (uint8_t *)malloc(MASK_SIZE);
     assert(NULL != pchSourceMask);
     for (size_t n = 0; n < PIXEL_COUNT; n++) {
-        pchSourceMask[n] = 0xFF;
+        pchSourceMask[n] = n;
     }
 
     uint8_t *pchTargetMask = (uint8_t *)malloc(MASK_SIZE);
@@ -109,13 +109,14 @@ int main(void) {
         PIXEL_COUNT);
 #endif
 
-    __arm_2d_sve_rgb565_blend_with_masks_and_opacity(
-        (uint16_t *)pchSource, 
-        pchSourceMask,
+    __arm_2d_sve_rgb565_reverse_blend_with_target_mask_and_opacity(
+        (uint16_t *)pchSource + PIXEL_COUNT - 1, 
+        //pchSourceMask + PIXEL_COUNT - 1,
         (uint16_t *)pchTarget,
         pchTargetMask,
-        PIXEL_COUNT,
-        0xFF);
+        PIXEL_COUNT
+        ,0xFF
+    );
 
     //sve_tester((uint32_t *)pchSource + 20 - 1, (uint32_t *)pchTarget, pchMask + 20 - 1, 20);
 
@@ -172,7 +173,7 @@ void sve_tester(uint32_t * __restrict pwSource,
         svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
 
         /* process low half */
-        __arm_2d_sve_stride_ccca_foreach_chn__(vSourceHigh16x4, vTargetLow16x4,
+        __arm_2d_sve_pixel_ccca_foreach_chn__(vSourceHigh16x4, vTargetLow16x4,
 
             if (__chn_idx__ == 3) {
                 SVT_PRINT_VECTOR(svrev(vSourceMaskHigh), uint16_t, "0x%04"PRIx16);
@@ -190,7 +191,7 @@ void sve_tester(uint32_t * __restrict pwSource,
         /* process high half */
         svuint16_t vSourceMaskLow = svrev(svunpklo_u16(vu8SourceMask));
 
-        __arm_2d_sve_stride_ccca_foreach_chn__(vSourceLow16x4, vTargetHigh16x4,
+        __arm_2d_sve_pixel_ccca_foreach_chn__(vSourceLow16x4, vTargetHigh16x4,
 
             if (__chn_idx__ == 3) {
                 __svu16_target__ = vSourceMaskLow;

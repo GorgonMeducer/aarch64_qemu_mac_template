@@ -75,7 +75,7 @@
                 });                                                             \
                 ARM_2D_SAFE_NAME(n) += __iteration_advance__)
 
-#define __arm_2d_sve_stride_ccc_foreach_chn__(  __source_u16x3,                 \
+#define __arm_2d_sve_pixel_ccc_foreach_chn__(  __source_u16x3,                 \
                                                 __target_u16x3,                 \
                                                 ...)                            \
         do {                                                                    \
@@ -103,7 +103,7 @@
             __target_u16x3 = svset3(__target_u16x3, 2, __svu16_target__);       \
         } while(0);                                                             \
 
-#define __arm_2d_sve_stride_ccca_foreach_chn012__(  __source_u16x4,             \
+#define __arm_2d_sve_pixel_ccca_foreach_chn012__(  __source_u16x4,             \
                                                     __target_u16x4,             \
                                                     ...)                        \
         do {                                                                    \
@@ -131,7 +131,7 @@
             __target_u16x4 = svset4(__target_u16x4, 2, __svu16_target__);       \
         } while(0)
 
-#define __arm_2d_sve_stride_ccca_foreach_chn__( __source_u16x4,                 \
+#define __arm_2d_sve_pixel_ccca_foreach_chn__( __source_u16x4,                 \
                                                 __target_u16x4,                 \
                                                 ...)                            \
         do {                                                                    \
