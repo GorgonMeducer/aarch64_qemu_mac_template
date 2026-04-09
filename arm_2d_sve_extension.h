@@ -331,5 +331,6 @@ svuint16_t __arm_2d_sve_chn_blend_with_masks_and_opacity(
 
 #include "__arm_2d_sve_stride_rgb565.h"
 #include "__arm_2d_sve_stride_cccn888.h"
+#include "__arm_2d_sve_stride_ccca8888.h"
 
 #endif
