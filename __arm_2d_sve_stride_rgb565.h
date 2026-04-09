@@ -961,11 +961,11 @@ void __arm_2d_sve_rgb565_reverse_blend_with_masks_and_opacity(
         __arm_2d_sve_pixel_ccc_foreach_chn__(vSource16x4, vTarget16x4,
         
             __svu16_target__ =  __arm_2d_sve_chn_blend_with_masks_and_opacity(
-                                                svrev(__svu16_source__),
-                                                __svu16_target__,
-                                                vSourceMask,
-                                                vTargetMask,
-                                                hwOpacity);
+                                                    svrev(__svu16_source__),
+                                                    __svu16_target__,
+                                                    vSourceMask,
+                                                    vTargetMask,
+                                                    hwOpacity);
         );
 
         svst1_u16(vTailPred, phwTarget, __arm_2d_sve_rgb565_pack(vTarget16x4));
