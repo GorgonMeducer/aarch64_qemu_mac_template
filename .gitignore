@@ -56,3 +56,4 @@ dkms.conf
 initramfs.cpio.gz
 initrd/test
 test
+.DS_Store
