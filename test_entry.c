@@ -11,6 +11,9 @@
 #include "sve_util.h"
 #include "arm_2d_sve_extension.h"
 
+
+
+
 __attribute__((nonnull(1,2)))
 void sve_tester(uint32_t * __restrict pwSource, 
                 uint32_t * __restrict pwTarget, 
@@ -68,9 +71,11 @@ int main(void) {
     for (size_t n = 0; n < INPUT_BUFFER_SIZE; n++) {
         uint8_t chData = n;//(n & 0x3) | ((n & ~0x03) << 2);
         pchSource[n] = chData;
+    #if 1
         if ((n & 0x03) == 0x03) {
             pchSource[n] = 0xFF;
         }
+    #endif
     }
 
     uint8_t *pchTarget = (uint8_t *)malloc(OUTPUT_BUFFER_SIZE);
@@ -112,6 +117,7 @@ int main(void) {
         PIXEL_COUNT);
 #endif
 
+#if 0
     __arm_2d_sve_ccca8888_blend_to_cccn888_with_opacity(
         (uint32_t *)pchSource, 
         //pchSourceMask + PIXEL_COUNT - 1,
@@ -120,13 +126,15 @@ int main(void) {
         PIXEL_COUNT
         ,0xFF
     );
+#endif
 
     //sve_tester((uint32_t *)pchSource + 20 - 1, (uint32_t *)pchTarget, pchMask + 20 - 1, 20);
 
 
+    __arm_2d_sve_ccca8888_blend_to_rgb565_and_opacity((uint32_t *)pchSource, (uint16_t *)pchTarget, PIXEL_COUNT, 0x80);
 
     SVT_PRINT_BUFFER(pchSource, INPUT_BUFFER_SIZE, uint32_t, "%08"PRIx32, 16);
-    SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE, uint32_t, "%08"PRIx32, 16);
+    SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE, uint16_t, "%04"PRIx16, 16);
 
     
     free(pchSource);
@@ -208,7 +216,7 @@ void sve_tester(uint32_t * __restrict pwSource,
             }
         );
 
-        svst4ub_u16(vTailPred, (uint8_t *)pwTarget, &vTargetLow16x4, &vTargetHigh16x4);
+        svst4ub_u16(vTailPred, (uint8_t *)pwTarget, vTargetLow16x4, vTargetHigh16x4);
 
         pwTarget += __iteration_advance__;
     }
@@ -248,3 +256,5 @@ void sve_tester(uint32_t * __restrict pwSource,
     SVT_PRINT_VECTOR(vAlpha3, uint16_t, "0x%04"PRIx16);
 #endif
 }
+
+

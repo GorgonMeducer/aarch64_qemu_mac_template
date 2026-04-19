@@ -195,12 +195,73 @@ svuint16_t __arm_2d_sve_rgb565_pack(svuint16x3_t vRGB16x3)
 
 __STATIC_INLINE
 ARM_NONNULL(2,3,4)
-void svld4ub_u16(   svbool_t vPred, 
+void svld3rgb565_u16(   svbool_t vPredu8, 
+                        uint16_t *phwSource, 
+                        svuint16x3_t *pvLow, 
+                        svuint16x3_t *pvHigh)
+{
+    svuint8x2_t vInput8x2 = svld2_u8(vPredu8, (uint8_t *)phwSource);
+
+    svuint16_t vLowByteLowHalf = svunpklo_u16(svget2_u8(vInput8x2, 0));
+    svuint16_t vLowByteHighHalf = svunpkhi_u16(svget2_u8(vInput8x2, 0));
+
+    svuint16_t vHighByteLowHalf = svunpklo_u16(svget2_u8(vInput8x2, 1));
+    svuint16_t vHighByteHighHalf = svunpkhi_u16(svget2_u8(vInput8x2, 1));
+
+    *pvLow = __arm_2d_sve_rgb565_unpack (   vLowByteLowHalf 
+                                        |   (vHighByteLowHalf << 8));
+    *pvHigh = __arm_2d_sve_rgb565_unpack(   vLowByteHighHalf 
+                                        |   (vHighByteHighHalf << 8));
+
+}
+
+__STATIC_INLINE
+ARM_NONNULL(2)
+void svst3rgb565_u16(svbool_t vPredu8, 
+                     uint16_t *phwTarget, 
+                     svuint16x3_t vLow, 
+                     svuint16x3_t vHigh)
+{
+    svuint16_t vLowByteLowHalf = svundef_u16();
+    svuint16_t vHighByteLowHalf = svundef_u16();
+
+    /* pack low half pixels */
+    do {
+        svuint16_t vPixel = __arm_2d_sve_rgb565_pack(vLow);
+
+        vLowByteLowHalf = vPixel & 0xFF;
+        vHighByteLowHalf = vPixel >> 8;
+    } while(0);
+
+    svuint16_t vLowByteHighHalf = svundef_u16();
+    svuint16_t vHighByteHighHalf = svundef_u16();
+
+    /* pack high half pixels */
+    do {
+        svuint16_t vPixel = __arm_2d_sve_rgb565_pack(vHigh);
+
+        vLowByteHighHalf = vPixel & 0xFF;
+        vHighByteHighHalf = vPixel >> 8;
+    } while(0);
+
+    /* save rgb565 pixels */
+    svuint8_t vLowByte = svuzp1_u8( svreinterpret_u8(vLowByteLowHalf),
+                                    svreinterpret_u8(vLowByteHighHalf));
+
+    svuint8_t vHighByte = svuzp1_u8(svreinterpret_u8(vHighByteLowHalf),
+                                    svreinterpret_u8(vHighByteHighHalf));
+
+    svst2_u8(vPredu8, (uint8_t *)phwTarget, svcreate2_u8(vLowByte, vHighByte));
+}
+
+__STATIC_INLINE
+ARM_NONNULL(2,3,4)
+void svld4ub_u16(   svbool_t vPredu8, 
                     uint8_t *pchSource, 
                     svuint16x4_t *pvLow, 
                     svuint16x4_t *pvHigh )
 {
-    svuint8x4_t vInput8x4 = svld4_u8(vPred, pchSource);
+    svuint8x4_t vInput8x4 = svld4_u8(vPredu8, pchSource);
 
     *pvLow = svset4_u16(*pvLow, 0, svunpklo_u16(svget4_u8(vInput8x4, 0)));
     *pvLow = svset4_u16(*pvLow, 1, svunpklo_u16(svget4_u8(vInput8x4, 1)));
@@ -214,26 +275,26 @@ void svld4ub_u16(   svbool_t vPred,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(2,3,4)
-void svst4ub_u16(   svbool_t vPred, 
+ARM_NONNULL(2)
+void svst4ub_u16(   svbool_t vPredu8, 
                     uint8_t *pchTarget, 
-                    svuint16x4_t *pvLow, 
-                    svuint16x4_t *pvHigh)
+                    svuint16x4_t vLow, 
+                    svuint16x4_t vHigh)
 {
 
-    svuint8_t vCH0u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(*pvLow, 0)),
-                                    svreinterpret_u8(svget4_u16(*pvHigh, 0)));
+    svuint8_t vCH0u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(vLow, 0)),
+                                    svreinterpret_u8(svget4_u16(vHigh, 0)));
 
-    svuint8_t vCH1u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(*pvLow, 1)),
-                                    svreinterpret_u8(svget4_u16(*pvHigh, 1)));
+    svuint8_t vCH1u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(vLow, 1)),
+                                    svreinterpret_u8(svget4_u16(vHigh, 1)));
     
-    svuint8_t vCH2u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(*pvLow, 2)),
-                                    svreinterpret_u8(svget4_u16(*pvHigh, 2)));
+    svuint8_t vCH2u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(vLow, 2)),
+                                    svreinterpret_u8(svget4_u16(vHigh, 2)));
 
-    svuint8_t vCH3u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(*pvLow, 3)),
-                                    svreinterpret_u8(svget4_u16(*pvHigh, 3)));
+    svuint8_t vCH3u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(vLow, 3)),
+                                    svreinterpret_u8(svget4_u16(vHigh, 3)));
 
-    svst4_u8(vPred, pchTarget, svcreate4_u8(vCH0u8, vCH1u8, vCH2u8, vCH3u8));
+    svst4_u8(vPredu8, pchTarget, svcreate4_u8(vCH0u8, vCH1u8, vCH2u8, vCH3u8));
 }
 
 /*! \note the Element range of vMask is [0, 0xFF]

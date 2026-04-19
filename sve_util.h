@@ -277,7 +277,7 @@
                     n += PERFC_SAFE_NAME(nElementBits)) {                       \
                                                                                 \
                 if (hwPred & 0x01) {                                            \
-                    printf("True");                                             \
+                    printf("True ");                                             \
                 } else {                                                        \
                     printf("False");                                            \
                 }                                                               \

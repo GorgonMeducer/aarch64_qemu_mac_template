@@ -57,7 +57,7 @@ void __arm_2d_sve_rgb565_fill_colour_with_opacity(
         svuint16x3_t vTarget16x3 = 
             __arm_2d_sve_rgb565_unpack(svld1_u16(vTailPred, phwTarget));
 
-        __arm_2d_sve_pixel_ccc_foreach_chn__(  tColour16x3,
+        __arm_2d_sve_pixel_ccc_foreach_chn__(   tColour16x3,
                                                 vTarget16x3,
             __svu16_target__ = __arm_2d_sve_chn_blend_with_opacity(
                                                     __svu16_source__,
