@@ -150,6 +150,142 @@ void __arm_2d_sve_ccca8888_blend_to_cccn888_with_opacity(
 }
 
 
+__STATIC_INLINE
+ARM_NONNULL(1,2,3)
+void __arm_2d_sve_ccca8888_blend_to_cccn888_with_target_mask(    
+                                                uint32_t * __RESTRICT pwSource,
+                                                uint32_t * __RESTRICT pwTarget,
+                                                uint8_t * __RESTRICT pchTargetMask,
+                                                size_t uStride)
+{
+    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred) {
+
+        svuint16x4_t vSourceLow16x4 = svundef4_u16();
+        svuint16x4_t vSourceHigh16x4 = svundef4_u16();
+
+        svuint16x4_t vTargetLow16x4 = svundef4_u16();
+        svuint16x4_t vTargetHigh16x4 = svundef4_u16();
+
+        svld4ub_u16(vTailPred, 
+                    (uint8_t *)pwSource, 
+                    &vSourceLow16x4, 
+                    &vSourceHigh16x4);
+
+        svld4ub_u16(vTailPred, 
+                    (uint8_t *)pwTarget, 
+                    &vTargetLow16x4, 
+                    &vTargetHigh16x4);
+
+        svuint16_t vTargetMask = svld1ub_u16(vTailPred, pchTargetMask);
+
+        /* process low half */
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(   vSourceLow16x4, 
+                                                    vTargetLow16x4,
+
+            svuint16_t vMask = svget4(vSourceLow16x4, 3);
+
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_masks(__svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vMask,
+                                                    vTargetMask);
+        );
+
+        /* process high half */
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(   vSourceHigh16x4, 
+                                                    vTargetHigh16x4,
+
+            svuint16_t vMask = svget4(vSourceHigh16x4, 3);
+
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_masks( 
+                                                    __svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vMask,
+                                                    vTargetMask);
+        );
+
+        svst4ub_u16(vTailPred, 
+                    (uint8_t *)pwTarget, 
+                    vTargetLow16x4, 
+                    vTargetHigh16x4);
+
+        pwSource += __iteration_advance__;
+        pchTargetMask += __iteration_advance__;
+        pwTarget += __iteration_advance__;
+    }
+}
+
+__STATIC_INLINE
+ARM_NONNULL(1,2,3)
+void __arm_2d_sve_ccca8888_blend_to_cccn888_with_target_mask_and_opacity(    
+                                                uint32_t * __RESTRICT pwSource,
+                                                uint32_t * __RESTRICT pwTarget,
+                                                uint8_t * __RESTRICT pchTargetMask,
+                                                size_t uStride,
+                                                uint16_t hwOpacity)
+{
+    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred) {
+
+        svuint16x4_t vSourceLow16x4 = svundef4_u16();
+        svuint16x4_t vSourceHigh16x4 = svundef4_u16();
+
+        svuint16x4_t vTargetLow16x4 = svundef4_u16();
+        svuint16x4_t vTargetHigh16x4 = svundef4_u16();
+
+        svld4ub_u16(vTailPred, 
+                    (uint8_t *)pwSource, 
+                    &vSourceLow16x4, 
+                    &vSourceHigh16x4);
+
+        svld4ub_u16(vTailPred, 
+                    (uint8_t *)pwTarget, 
+                    &vTargetLow16x4, 
+                    &vTargetHigh16x4);
+
+        svuint16_t vTargetMask = svld1ub_u16(vTailPred, pchTargetMask);
+
+        /* process low half */
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(   vSourceLow16x4, 
+                                                    vTargetLow16x4,
+
+            svuint16_t vMask = svget4(vSourceLow16x4, 3);
+
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_masks_and_opacity( 
+                                                    __svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vMask,
+                                                    vTargetMask,
+                                                    hwOpacity);
+        );
+
+        /* process high half */
+        __arm_2d_sve_pixel_ccca_foreach_chn012__(   vSourceHigh16x4, 
+                                                    vTargetHigh16x4,
+
+            svuint16_t vMask = svget4(vSourceHigh16x4, 3);
+
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_masks_and_opacity( 
+                                                    __svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vMask,
+                                                    vTargetMask,
+                                                    hwOpacity);
+        );
+
+        svst4ub_u16(vTailPred, 
+                    (uint8_t *)pwTarget, 
+                    vTargetLow16x4, 
+                    vTargetHigh16x4);
+
+        pwSource += __iteration_advance__;
+        pchTargetMask += __iteration_advance__;
+        pwTarget += __iteration_advance__;
+    }
+}
+
 /*----------------------------------------------------------------------------*
  * Blending to RGB565                                                         *
  *----------------------------------------------------------------------------*/
@@ -293,6 +429,161 @@ void __arm_2d_sve_ccca8888_blend_to_rgb565_and_opacity(
 
         pwSource += __iteration_advance__;
         phwTarget += __iteration_advance__;
+    }
+}
+
+__STATIC_INLINE
+ARM_NONNULL(1,2)
+void __arm_2d_sve_ccca8888_blend_to_rgb565_with_target_mask( 
+                                            uint32_t * __RESTRICT pwSource,
+                                            uint16_t * __RESTRICT phwTarget,
+                                            uint8_t * __RESTRICT pchTargetMask,
+                                            size_t uStride)
+{
+    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred) {
+
+        svuint16x4_t vSourceLow16x4 = svundef4_u16();
+        svuint16x4_t vSourceHigh16x4 = svundef4_u16();
+
+        svuint16x3_t vTargetLow16x3 = svundef3_u16();
+        svuint16x3_t vTargetHigh16x3 = svundef3_u16();
+
+        svld4ub_u16(vTailPred, 
+                    (uint8_t *)pwSource, 
+                    &vSourceLow16x4, 
+                    &vSourceHigh16x4);
+
+        svuint16x3_t vSourceLow16x3 = svcreate3_u16(svget4(vSourceLow16x4, 0), 
+                                                    svget4(vSourceLow16x4, 1),
+                                                    svget4(vSourceLow16x4, 2));
+
+        svuint16x3_t vSourceHigh16x3 = svcreate3_u16(   
+                                                    svget4(vSourceHigh16x4, 0), 
+                                                    svget4(vSourceHigh16x4, 1),
+                                                    svget4(vSourceHigh16x4, 2));
+
+        svld3rgb565_u16(vTailPred, 
+                        phwTarget, 
+                        &vTargetLow16x3, 
+                        &vTargetHigh16x3);
+
+        svuint16_t vTargetMask = svld1ub_u16(vTailPred, pchTargetMask);
+
+        /* process low half */
+        __arm_2d_sve_pixel_ccc_foreach_chn__(   vSourceLow16x3, 
+                                                vTargetLow16x3,
+
+            svuint16_t vMask = svget4(vSourceLow16x4, 3);
+
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_masks(__svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vMask,
+                                                    vTargetMask);
+
+        );
+
+        /* process high half */
+        __arm_2d_sve_pixel_ccc_foreach_chn__(   vSourceHigh16x3, 
+                                                vTargetHigh16x3,
+
+            svuint16_t vMask = svget4(vSourceHigh16x4, 3);
+
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_masks(__svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vMask,
+                                                    vTargetMask);
+        );
+
+        svst3rgb565_u16(vTailPred, 
+                        phwTarget, 
+                        vTargetLow16x3, 
+                        vTargetHigh16x3);
+
+        pwSource += __iteration_advance__;
+        phwTarget += __iteration_advance__;
+        pchTargetMask += __iteration_advance__;
+    }
+}
+
+__STATIC_INLINE
+ARM_NONNULL(1,2)
+void __arm_2d_sve_ccca8888_blend_to_rgb565_with_target_mask_and_opacity( 
+                                            uint32_t * __RESTRICT pwSource,
+                                            uint16_t * __RESTRICT phwTarget,
+                                            uint8_t * __RESTRICT pchTargetMask,
+                                            size_t uStride,
+                                            uint16_t hwOpacity)
+{
+    __arm_2d_sve_stride_loop_ccca8888__(uStride, vTailPred) {
+
+        svuint16x4_t vSourceLow16x4 = svundef4_u16();
+        svuint16x4_t vSourceHigh16x4 = svundef4_u16();
+
+        svuint16x3_t vTargetLow16x3 = svundef3_u16();
+        svuint16x3_t vTargetHigh16x3 = svundef3_u16();
+
+        svld4ub_u16(vTailPred, 
+                    (uint8_t *)pwSource, 
+                    &vSourceLow16x4, 
+                    &vSourceHigh16x4);
+
+        svuint16x3_t vSourceLow16x3 = svcreate3_u16(svget4(vSourceLow16x4, 0), 
+                                                    svget4(vSourceLow16x4, 1),
+                                                    svget4(vSourceLow16x4, 2));
+
+        svuint16x3_t vSourceHigh16x3 = svcreate3_u16(   
+                                                    svget4(vSourceHigh16x4, 0), 
+                                                    svget4(vSourceHigh16x4, 1),
+                                                    svget4(vSourceHigh16x4, 2));
+
+        svld3rgb565_u16(vTailPred, 
+                        phwTarget, 
+                        &vTargetLow16x3, 
+                        &vTargetHigh16x3);
+
+        svuint16_t vTargetMask = svld1ub_u16(vTailPred, pchTargetMask);
+
+        /* process low half */
+        __arm_2d_sve_pixel_ccc_foreach_chn__(   vSourceLow16x3, 
+                                                vTargetLow16x3,
+
+            svuint16_t vMask = svget4(vSourceLow16x4, 3);
+
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_masks_and_opacity( 
+                                                    __svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vMask,
+                                                    vTargetMask,
+                                                    hwOpacity);
+
+        );
+
+        /* process high half */
+        __arm_2d_sve_pixel_ccc_foreach_chn__(   vSourceHigh16x3, 
+                                                vTargetHigh16x3,
+
+            svuint16_t vMask = svget4(vSourceHigh16x4, 3);
+
+            __svu16_target__ 
+                = __arm_2d_sve_chn_blend_with_masks_and_opacity( 
+                                                    __svu16_source__, 
+                                                    __svu16_target__, 
+                                                    vMask,
+                                                    vTargetMask,
+                                                    hwOpacity);
+        );
+
+        svst3rgb565_u16(vTailPred, 
+                        phwTarget, 
+                        vTargetLow16x3, 
+                        vTargetHigh16x3);
+
+        pwSource += __iteration_advance__;
+        phwTarget += __iteration_advance__;
+        pchTargetMask += __iteration_advance__;
     }
 }
 
