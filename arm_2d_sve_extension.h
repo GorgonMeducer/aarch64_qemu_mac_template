@@ -390,6 +390,33 @@ svuint16_t __arm_2d_sve_chn_blend_with_masks_and_opacity(
 }
 
 /*! \note the Element range of vMask0/1 is [0, 0xFF]
+ */
+__STATIC_INLINE
+svuint16_t __arm_2d_sve_chn_blend_with_3masks(  svuint16_t vSource, 
+                                                svuint16_t vTarget, 
+                                                svuint16_t vMask0,
+                                                svuint16_t vMask1,
+                                                svuint16_t vMask2)
+{
+    vMask0 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask0, 255), 
+                         vMask0, 
+                         svdup_u16(1));
+
+    svuint16_t vMask = 
+        svsel(  svcmpge_n_u16(svptrue_b16(), vMask1, 255), 
+                vMask0, 
+                (vMask0 * vMask1) >> 8);
+
+    vMask = 
+        svsel(  svcmpge_n_u16(svptrue_b16(), vMask2, 255), 
+                vMask, 
+                (vMask * vMask2) >> 8);
+
+    vTarget = vSource * vMask + vTarget * (256 - vMask);
+    return vTarget >> 8;
+}
+
+/*! \note the Element range of vMask0/1 is [0, 0xFF]
  *  \note the hwOpacity range [0, 0x100]
  */
 __STATIC_INLINE
