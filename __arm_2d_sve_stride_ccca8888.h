@@ -218,6 +218,20 @@ void __arm_2d_sve_ccca8888_blend_to_cccn888_with_target_mask(
 
 __STATIC_INLINE
 ARM_NONNULL(1,2,3)
+void __arm_2d_sve_ccca8888_blend_to_cccn888_with_source_mask(    
+                                            uint32_t * __RESTRICT pwSource,
+                                            uint8_t * __RESTRICT pchSourceMask,
+                                            uint32_t * __RESTRICT pwTarget,
+                                            size_t uStride)
+{
+    return __arm_2d_sve_ccca8888_blend_to_cccn888_with_target_mask( pwSource, 
+                                                                    pwTarget, 
+                                                                    pchSourceMask, 
+                                                                    uStride);
+}
+
+__STATIC_INLINE
+ARM_NONNULL(1,2,3)
 void __arm_2d_sve_ccca8888_blend_to_cccn888_with_target_mask_and_opacity(    
                                                 uint32_t * __RESTRICT pwSource,
                                                 uint32_t * __RESTRICT pwTarget,
@@ -284,6 +298,23 @@ void __arm_2d_sve_ccca8888_blend_to_cccn888_with_target_mask_and_opacity(
         pchTargetMask += __iteration_advance__;
         pwTarget += __iteration_advance__;
     }
+}
+
+__STATIC_INLINE
+ARM_NONNULL(1,2,3)
+void __arm_2d_sve_ccca8888_blend_to_cccn888_with_source_mask_and_opacity(    
+                                            uint32_t * __RESTRICT pwSource,
+                                            uint8_t * __RESTRICT pchSourceMask,
+                                            uint32_t * __RESTRICT pwTarget,
+                                            size_t uStride,
+                                            uint16_t hwOpacity)
+{
+    return __arm_2d_sve_ccca8888_blend_to_cccn888_with_target_mask_and_opacity(
+                                                                pwSource, 
+                                                                pwTarget, 
+                                                                pchSourceMask, 
+                                                                uStride, 
+                                                                hwOpacity);
 }
 
 /*----------------------------------------------------------------------------*
@@ -509,6 +540,21 @@ void __arm_2d_sve_ccca8888_blend_to_rgb565_with_target_mask(
 
 __STATIC_INLINE
 ARM_NONNULL(1,2)
+void __arm_2d_sve_ccca8888_blend_to_rgb565_with_source_mask( 
+                                            uint32_t * __RESTRICT pwSource,
+                                            uint8_t * __RESTRICT pchSourceMask,
+                                            uint16_t * __RESTRICT phwTarget,
+                                            size_t uStride)
+{
+    return __arm_2d_sve_ccca8888_blend_to_rgb565_with_target_mask(  
+                                                                pwSource, 
+                                                                phwTarget, 
+                                                                pchSourceMask,
+                                                                uStride);
+}
+
+__STATIC_INLINE
+ARM_NONNULL(1,2)
 void __arm_2d_sve_ccca8888_blend_to_rgb565_with_target_mask_and_opacity( 
                                             uint32_t * __RESTRICT pwSource,
                                             uint16_t * __RESTRICT phwTarget,
@@ -585,6 +631,23 @@ void __arm_2d_sve_ccca8888_blend_to_rgb565_with_target_mask_and_opacity(
         phwTarget += __iteration_advance__;
         pchTargetMask += __iteration_advance__;
     }
+}
+
+__STATIC_INLINE
+ARM_NONNULL(1,2)
+void __arm_2d_sve_ccca8888_blend_to_rgb565_with_source_mask_and_opacity( 
+                                            uint32_t * __RESTRICT pwSource,
+                                            uint8_t * __RESTRICT pchSourceMask,
+                                            uint16_t * __RESTRICT phwTarget,
+                                            size_t uStride,
+                                            uint16_t hwOpacity)
+{
+    __arm_2d_sve_ccca8888_blend_to_rgb565_with_target_mask_and_opacity(
+                                                                pwSource, 
+                                                                phwTarget, 
+                                                                pchSourceMask,
+                                                                uStride, 
+                                                                hwOpacity);
 }
 
 #endif  /* __ARM_2D_SVE_STRIDE_CCCN8888_H__ */
