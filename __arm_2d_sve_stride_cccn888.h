@@ -1047,7 +1047,7 @@ void __arm_2d_sve_cccn888_reverse_blend(uint32_t * __RESTRICT pwSource,
 
         /* process low half */
         __arm_2d_sve_pixel_ccca_foreach_chn__( vSourceHigh16x4, 
-                                                vTargetLow16x4,
+                                               vTargetLow16x4,
             __svu16_target__ = svrev(__svu16_source__);
         );
 
@@ -1237,7 +1237,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask_and_opacity(
         /* process low half */
         svuint16_t vSourceMaskHigh = svrev(svunpkhi_u16(vu8SourceMask));
         __arm_2d_sve_pixel_ccca_foreach_chn012__(  vSourceHigh16x4, 
-                                                    vTargetLow16x4,
+                                                   vTargetLow16x4,
 
             __svu16_target__ 
                 = __arm_2d_sve_chn_blend_with_mask_and_opacity( 
