@@ -11,7 +11,7 @@
 //#include "sve_util.h"
 //#include "arm_2d_sve_extension.h"
 
-#if 0
+#if 1
 #undef sdl_sve_rgb32_blend_op_fill_alpha
 #define sdl_sve_rgb32_blend_op_fill_alpha(ma_alpha_chn_idx)                     \
             if (sve_src_chn_idx == (ma_alpha_chn_idx)) {                        \
@@ -49,6 +49,8 @@
                     = sdl_sve_chn_blend_with_mask(  sve_source_u16,             \
                                                     sve_target_u16,             \
                                                     vMask);                     \
+            SVT_PRINT_VECTOR(sve_source_u16, uint16_t, "%04x");                 \
+            SVT_PRINT_VECTOR(sve_target_u16, uint16_t, "%04x");                 \
         } while(0)
 #else
 
@@ -151,17 +153,17 @@ int main(void) {
     sdl_sve_bgra8888_blend_to_rgb565
     sdl_sve_abgr8888_blend_to_rgb565
     */
-    sdl_sve_a123_blend_to_321a_copy_alpha(  
+    sdl_sve_argb8888_blend_to_rgb565(  
                                             pchSource, 
                                             INPUT_BUFFER_SIZE / 2, 
                                             pchTarget, 
-                                            OUTPUT_BUFFER_SIZE / 2, 
-                                            OUTPUT_BUFFER_SIZE / 2, 
+                                            OUTPUT_BUFFER_SIZE / 4, 
+                                            OUTPUT_BUFFER_SIZE / 8, 
                                             2);
 
     SVT_PRINT_BUFFER(pchSource, INPUT_BUFFER_SIZE, uint32_t, "%08"PRIx32, 16);
-    SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE, uint32_t, "%08"PRIx32, 16);
-    //SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE / 2, uint16_t, "%04"PRIx16, 16);
+    //SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE, uint32_t, "%08"PRIx32, 16);
+    SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE / 2, uint16_t, "%04"PRIx16, 16);
 
     
     free(pchSource);
