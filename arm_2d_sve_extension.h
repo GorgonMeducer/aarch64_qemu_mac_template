@@ -15,158 +15,157 @@
  *                                                                            *
  ******************************************************************************/
 
-#if !defined(__SVE_2D_EXTENSION_H__)                                            \
-    && (defined(__ARM_FEATURE_SVE2)                                             \
-    && __ARM_FEATURE_SVE2)
+#if !defined(__SVE_2D_EXTENSION_H__) && (defined(__ARM_FEATURE_SVE2) && __ARM_FEATURE_SVE2)
 #define __SVE_2D_EXTENSION_H__
 
 #include <arm_sve.h>
 #include <stdint.h>
 
 #ifndef __STATIC_INLINE
-#   define __STATIC_INLINE      static inline
+#define __STATIC_INLINE static inline
 #endif
 
 /*!
  * \brief a wrapper for __attribute__((nonnull))
  */
 #ifndef ARM_NONNULL
-#   define ARM_NONNULL(...)     __attribute__((nonnull(__VA_ARGS__)))
+#define ARM_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
 #endif
 
 #ifndef __RESTRICT
-#   define __RESTRICT   restrict
+#define __RESTRICT restrict
 #endif
 
-#define svlenu8()   svcntb_pat(SV_ALL)
-#define svlenu16()  (svcntb_pat(SV_ALL) / sizeof(uint16_t))
-#define svlenu32()  (svcntb_pat(SV_ALL) / sizeof(uint32_t))
-#define svlenu64()  (svcntb_pat(SV_ALL) / sizeof(uint64_t))
+#define svlenu8()  svcntb_pat(SV_ALL)
+#define svlenu16() (svcntb_pat(SV_ALL) / sizeof(uint16_t))
+#define svlenu32() (svcntb_pat(SV_ALL) / sizeof(uint32_t))
+#define svlenu64() (svcntb_pat(SV_ALL) / sizeof(uint64_t))
 
-#define svlens8()   svlenu8()
-#define svlens16()  svlenu16()
-#define svlens32()  svlenu32()
-#define svlens64()  svlenu64()
+#define svlens8()  svlenu8()
+#define svlens16() svlenu16()
+#define svlens32() svlenu32()
+#define svlens64() svlenu64()
 
-#define __arm_2d_sve_stride_loop_ccca8888__(__stride_size, __pred_name)         \
-    for (   svbool_t __pred_name, *pTemp = &__pred_name;                        \
-            pTemp != NULL;                                                      \
-            pTemp = NULL)                                                       \
-        for (   size_t ARM_2D_SAFE_NAME(n) = 0,                                 \
-                __iteration_advance__ = svlenu32() * 4;                         \
-                ({  __pred_name = svwhilelt_b8( ARM_2D_SAFE_NAME(n),            \
-                                                (__stride_size));               \
-                    ARM_2D_SAFE_NAME(n) < (__stride_size);                      \
-                });                                                             \
-                ARM_2D_SAFE_NAME(n) += __iteration_advance__)
+#define __arm_2d_sve_stride_loop_ccca8888__(__stride_size, __pred_name) \
+    for (svbool_t __pred_name, *pTemp = &__pred_name;                   \
+         pTemp != NULL;                                                 \
+         pTemp = NULL)                                                  \
+        for (size_t ARM_2D_SAFE_NAME(n) = 0,                            \
+                    __iteration_advance__ = svlenu32() * 4;             \
+             ({                                                         \
+                 __pred_name = svwhilelt_b8(ARM_2D_SAFE_NAME(n),        \
+                                            (__stride_size));           \
+                 ARM_2D_SAFE_NAME(n) < (__stride_size);                 \
+             });                                                        \
+             ARM_2D_SAFE_NAME(n) += __iteration_advance__)
 
-#define __arm_2d_sve_stride_loop_rgb32__(__stride_size, __pred_name)            \
-            __arm_2d_sve_stride_loop_ccca8888__(__stride_size, __pred_name)
+#define __arm_2d_sve_stride_loop_rgb32__(__stride_size, __pred_name) \
+    __arm_2d_sve_stride_loop_ccca8888__(__stride_size, __pred_name)
 
-#define __arm_2d_sve_stride_loop_rgb16__(__stride_size, __pred_name)            \
-    for (   svbool_t __pred_name, *pTemp = &__pred_name;                        \
-            pTemp != NULL;                                                      \
-            pTemp = NULL)                                                       \
-        for (   size_t ARM_2D_SAFE_NAME(n) = 0,                                 \
-                __iteration_advance__ = svlenu16();                             \
-                ({  __pred_name = svwhilelt_b16(ARM_2D_SAFE_NAME(n),            \
-                                                (__stride_size));               \
-                    ARM_2D_SAFE_NAME(n) < (__stride_size);                      \
-                });                                                             \
-                ARM_2D_SAFE_NAME(n) += __iteration_advance__)
+#define __arm_2d_sve_stride_loop_rgb16__(__stride_size, __pred_name) \
+    for (svbool_t __pred_name, *pTemp = &__pred_name;                \
+         pTemp != NULL;                                              \
+         pTemp = NULL)                                               \
+        for (size_t ARM_2D_SAFE_NAME(n) = 0,                         \
+                    __iteration_advance__ = svlenu16();              \
+             ({                                                      \
+                 __pred_name = svwhilelt_b16(ARM_2D_SAFE_NAME(n),    \
+                                             (__stride_size));       \
+                 ARM_2D_SAFE_NAME(n) < (__stride_size);              \
+             });                                                     \
+             ARM_2D_SAFE_NAME(n) += __iteration_advance__)
 
-#define __arm_2d_sve_pixel_ccc_foreach_chn__(  __source_u16x3,                 \
-                                                __target_u16x3,                 \
-                                                ...)                            \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 0;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget3((__source_u16x3), 0);          \
-            svuint16_t __svu16_target__ = svget3((__target_u16x3), 0);          \
-            __VA_ARGS__                                                         \
-            __target_u16x3 = svset3(__target_u16x3, 0, __svu16_target__);       \
-        } while(0);                                                             \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 1;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget3((__source_u16x3), 1);          \
-            svuint16_t __svu16_target__ = svget3((__target_u16x3), 1);          \
-            __VA_ARGS__                                                         \
-            __target_u16x3 = svset3(__target_u16x3, 1, __svu16_target__);       \
-        } while(0);                                                             \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 2;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget3((__source_u16x3), 2);          \
-            svuint16_t __svu16_target__ = svget3((__target_u16x3), 2);          \
-            __VA_ARGS__                                                         \
-            __target_u16x3 = svset3(__target_u16x3, 2, __svu16_target__);       \
-        } while(0);                                                             \
+#define __arm_2d_sve_pixel_ccc_foreach_chn__(__source_u16x3,          \
+                                             __target_u16x3,          \
+                                             ...)                     \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 0;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget3((__source_u16x3), 0);    \
+        svuint16_t __svu16_target__ = svget3((__target_u16x3), 0);    \
+        __VA_ARGS__                                                   \
+        __target_u16x3 = svset3(__target_u16x3, 0, __svu16_target__); \
+    } while (0);                                                      \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 1;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget3((__source_u16x3), 1);    \
+        svuint16_t __svu16_target__ = svget3((__target_u16x3), 1);    \
+        __VA_ARGS__                                                   \
+        __target_u16x3 = svset3(__target_u16x3, 1, __svu16_target__); \
+    } while (0);                                                      \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 2;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget3((__source_u16x3), 2);    \
+        svuint16_t __svu16_target__ = svget3((__target_u16x3), 2);    \
+        __VA_ARGS__                                                   \
+        __target_u16x3 = svset3(__target_u16x3, 2, __svu16_target__); \
+    } while (0);
 
-#define __arm_2d_sve_pixel_ccca_foreach_chn012__(  __source_u16x4,             \
-                                                    __target_u16x4,             \
-                                                    ...)                        \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 0;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget4((__source_u16x4), 0);          \
-            svuint16_t __svu16_target__ = svget4((__target_u16x4), 0);          \
-            __VA_ARGS__                                                         \
-            __target_u16x4 = svset4(__target_u16x4, 0, __svu16_target__);       \
-        } while(0);                                                             \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 1;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget4((__source_u16x4), 1);          \
-            svuint16_t __svu16_target__ = svget4((__target_u16x4), 1);          \
-            __VA_ARGS__                                                         \
-            __target_u16x4 = svset4(__target_u16x4, 1, __svu16_target__);       \
-        } while(0);                                                             \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 2;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget4((__source_u16x4), 2);          \
-            svuint16_t __svu16_target__ = svget4((__target_u16x4), 2);          \
-            __VA_ARGS__                                                         \
-            __target_u16x4 = svset4(__target_u16x4, 2, __svu16_target__);       \
-        } while(0)
+#define __arm_2d_sve_pixel_ccca_foreach_chn012__(__source_u16x4,      \
+                                                 __target_u16x4,      \
+                                                 ...)                 \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 0;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget4((__source_u16x4), 0);    \
+        svuint16_t __svu16_target__ = svget4((__target_u16x4), 0);    \
+        __VA_ARGS__                                                   \
+        __target_u16x4 = svset4(__target_u16x4, 0, __svu16_target__); \
+    } while (0);                                                      \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 1;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget4((__source_u16x4), 1);    \
+        svuint16_t __svu16_target__ = svget4((__target_u16x4), 1);    \
+        __VA_ARGS__                                                   \
+        __target_u16x4 = svset4(__target_u16x4, 1, __svu16_target__); \
+    } while (0);                                                      \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 2;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget4((__source_u16x4), 2);    \
+        svuint16_t __svu16_target__ = svget4((__target_u16x4), 2);    \
+        __VA_ARGS__                                                   \
+        __target_u16x4 = svset4(__target_u16x4, 2, __svu16_target__); \
+    } while (0)
 
-#define __arm_2d_sve_pixel_ccca_foreach_chn__( __source_u16x4,                 \
-                                                __target_u16x4,                 \
-                                                ...)                            \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 0;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget4((__source_u16x4), 0);          \
-            svuint16_t __svu16_target__ = svget4((__target_u16x4), 0);          \
-            __VA_ARGS__                                                         \
-            __target_u16x4 = svset4(__target_u16x4, 0, __svu16_target__);       \
-        } while(0);                                                             \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 1;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget4((__source_u16x4), 1);          \
-            svuint16_t __svu16_target__ = svget4((__target_u16x4), 1);          \
-            __VA_ARGS__                                                         \
-            __target_u16x4 = svset4(__target_u16x4, 1, __svu16_target__);       \
-        } while(0);                                                             \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 2;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget4((__source_u16x4), 2);          \
-            svuint16_t __svu16_target__ = svget4((__target_u16x4), 2);          \
-            __VA_ARGS__                                                         \
-            __target_u16x4 = svset4(__target_u16x4, 2, __svu16_target__);       \
-        } while(0);                                                             \
-        do {                                                                    \
-            const uint8_t __chn_idx__ = 3;                                      \
-            (void)__chn_idx__;                                                  \
-            svuint16_t __svu16_source__ = svget4((__source_u16x4), 3);          \
-            svuint16_t __svu16_target__ = svget4((__target_u16x4), 3);          \
-            __VA_ARGS__                                                         \
-            __target_u16x4 = svset4(__target_u16x4, 3, __svu16_target__);       \
-        } while(0)
-
+#define __arm_2d_sve_pixel_ccca_foreach_chn__(__source_u16x4,         \
+                                              __target_u16x4,         \
+                                              ...)                    \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 0;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget4((__source_u16x4), 0);    \
+        svuint16_t __svu16_target__ = svget4((__target_u16x4), 0);    \
+        __VA_ARGS__                                                   \
+        __target_u16x4 = svset4(__target_u16x4, 0, __svu16_target__); \
+    } while (0);                                                      \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 1;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget4((__source_u16x4), 1);    \
+        svuint16_t __svu16_target__ = svget4((__target_u16x4), 1);    \
+        __VA_ARGS__                                                   \
+        __target_u16x4 = svset4(__target_u16x4, 1, __svu16_target__); \
+    } while (0);                                                      \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 2;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget4((__source_u16x4), 2);    \
+        svuint16_t __svu16_target__ = svget4((__target_u16x4), 2);    \
+        __VA_ARGS__                                                   \
+        __target_u16x4 = svset4(__target_u16x4, 2, __svu16_target__); \
+    } while (0);                                                      \
+    do {                                                              \
+        const uint8_t __chn_idx__ = 3;                                \
+        (void)__chn_idx__;                                            \
+        svuint16_t __svu16_source__ = svget4((__source_u16x4), 3);    \
+        svuint16_t __svu16_target__ = svget4((__target_u16x4), 3);    \
+        __VA_ARGS__                                                   \
+        __target_u16x4 = svset4(__target_u16x4, 3, __svu16_target__); \
+    } while (0)
 
 __STATIC_INLINE
 svuint16x3_t __arm_2d_sve_rgb565_unpack(svuint16_t vPixels)
@@ -188,17 +187,15 @@ svuint16x3_t __arm_2d_sve_rgb565_unpack(svuint16_t vPixels)
 __STATIC_INLINE
 svuint16_t __arm_2d_sve_rgb565_pack(svuint16x3_t vRGB16x3)
 {
-    return  (svget3_u16(vRGB16x3, 0) >> 3)
-        |   ((svget3_u16(vRGB16x3, 1) & (0x3F << 2)) << 3)
-        |   ((svget3_u16(vRGB16x3, 2) & (0x1F << 3)) << 8);
+    return (svget3_u16(vRGB16x3, 0) >> 3) | ((svget3_u16(vRGB16x3, 1) & (0x3F << 2)) << 3) | ((svget3_u16(vRGB16x3, 2) & (0x1F << 3)) << 8);
 }
 
 __STATIC_INLINE
-ARM_NONNULL(2,3,4)
-void svld3rgb565_u16(   svbool_t vPredu8, 
-                        uint16_t *phwSource, 
-                        svuint16x3_t *pvLow, 
-                        svuint16x3_t *pvHigh)
+ARM_NONNULL(2, 3, 4)
+void svld3rgb565_u16(svbool_t vPredu8,
+                     uint16_t *phwSource,
+                     svuint16x3_t *pvLow,
+                     svuint16x3_t *pvHigh)
 {
     svuint8x2_t vInput8x2 = svld2_u8(vPredu8, (uint8_t *)phwSource);
 
@@ -208,18 +205,15 @@ void svld3rgb565_u16(   svbool_t vPredu8,
     svuint16_t vHighByteLowHalf = svunpklo_u16(svget2_u8(vInput8x2, 1));
     svuint16_t vHighByteHighHalf = svunpkhi_u16(svget2_u8(vInput8x2, 1));
 
-    *pvLow = __arm_2d_sve_rgb565_unpack (   vLowByteLowHalf 
-                                        |   (vHighByteLowHalf << 8));
-    *pvHigh = __arm_2d_sve_rgb565_unpack(   vLowByteHighHalf 
-                                        |   (vHighByteHighHalf << 8));
-
+    *pvLow = __arm_2d_sve_rgb565_unpack(vLowByteLowHalf | (vHighByteLowHalf << 8));
+    *pvHigh = __arm_2d_sve_rgb565_unpack(vLowByteHighHalf | (vHighByteHighHalf << 8));
 }
 
 __STATIC_INLINE
 ARM_NONNULL(2)
-void svst3rgb565_u16(svbool_t vPredu8, 
-                     uint16_t *phwTarget, 
-                     svuint16x3_t vLow, 
+void svst3rgb565_u16(svbool_t vPredu8,
+                     uint16_t *phwTarget,
+                     svuint16x3_t vLow,
                      svuint16x3_t vHigh)
 {
     svuint16_t vLowByteLowHalf = svundef_u16();
@@ -231,7 +225,7 @@ void svst3rgb565_u16(svbool_t vPredu8,
 
         vLowByteLowHalf = vPixel & 0xFF;
         vHighByteLowHalf = vPixel >> 8;
-    } while(0);
+    } while (0);
 
     svuint16_t vLowByteHighHalf = svundef_u16();
     svuint16_t vHighByteHighHalf = svundef_u16();
@@ -242,11 +236,11 @@ void svst3rgb565_u16(svbool_t vPredu8,
 
         vLowByteHighHalf = vPixel & 0xFF;
         vHighByteHighHalf = vPixel >> 8;
-    } while(0);
+    } while (0);
 
     /* save rgb565 pixels */
-    svuint8_t vLowByte = svuzp1_u8( svreinterpret_u8(vLowByteLowHalf),
-                                    svreinterpret_u8(vLowByteHighHalf));
+    svuint8_t vLowByte = svuzp1_u8(svreinterpret_u8(vLowByteLowHalf),
+                                   svreinterpret_u8(vLowByteHighHalf));
 
     svuint8_t vHighByte = svuzp1_u8(svreinterpret_u8(vHighByteLowHalf),
                                     svreinterpret_u8(vHighByteHighHalf));
@@ -255,11 +249,11 @@ void svst3rgb565_u16(svbool_t vPredu8,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(2,3,4)
-void svld4ub_u16(   svbool_t vPredu8, 
-                    uint8_t *pchSource, 
-                    svuint16x4_t *pvLow, 
-                    svuint16x4_t *pvHigh )
+ARM_NONNULL(2, 3, 4)
+void svld4ub_u16(svbool_t vPredu8,
+                 uint8_t *pchSource,
+                 svuint16x4_t *pvLow,
+                 svuint16x4_t *pvHigh)
 {
     svuint8x4_t vInput8x4 = svld4_u8(vPredu8, pchSource);
 
@@ -267,7 +261,7 @@ void svld4ub_u16(   svbool_t vPredu8,
     *pvLow = svset4_u16(*pvLow, 1, svunpklo_u16(svget4_u8(vInput8x4, 1)));
     *pvLow = svset4_u16(*pvLow, 2, svunpklo_u16(svget4_u8(vInput8x4, 2)));
     *pvLow = svset4_u16(*pvLow, 3, svunpklo_u16(svget4_u8(vInput8x4, 3)));
-    
+
     *pvHigh = svset4_u16(*pvHigh, 0, svunpkhi_u16(svget4_u8(vInput8x4, 0)));
     *pvHigh = svset4_u16(*pvHigh, 1, svunpkhi_u16(svget4_u8(vInput8x4, 1)));
     *pvHigh = svset4_u16(*pvHigh, 2, svunpkhi_u16(svget4_u8(vInput8x4, 2)));
@@ -276,23 +270,23 @@ void svld4ub_u16(   svbool_t vPredu8,
 
 __STATIC_INLINE
 ARM_NONNULL(2)
-void svst4ub_u16(   svbool_t vPredu8, 
-                    uint8_t *pchTarget, 
-                    svuint16x4_t vLow, 
-                    svuint16x4_t vHigh)
+void svst4ub_u16(svbool_t vPredu8,
+                 uint8_t *pchTarget,
+                 svuint16x4_t vLow,
+                 svuint16x4_t vHigh)
 {
 
-    svuint8_t vCH0u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(vLow, 0)),
-                                    svreinterpret_u8(svget4_u16(vHigh, 0)));
+    svuint8_t vCH0u8 = svuzp1_u8(svreinterpret_u8(svget4_u16(vLow, 0)),
+                                 svreinterpret_u8(svget4_u16(vHigh, 0)));
 
-    svuint8_t vCH1u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(vLow, 1)),
-                                    svreinterpret_u8(svget4_u16(vHigh, 1)));
-    
-    svuint8_t vCH2u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(vLow, 2)),
-                                    svreinterpret_u8(svget4_u16(vHigh, 2)));
+    svuint8_t vCH1u8 = svuzp1_u8(svreinterpret_u8(svget4_u16(vLow, 1)),
+                                 svreinterpret_u8(svget4_u16(vHigh, 1)));
 
-    svuint8_t vCH3u8 = svuzp1_u8(   svreinterpret_u8(svget4_u16(vLow, 3)),
-                                    svreinterpret_u8(svget4_u16(vHigh, 3)));
+    svuint8_t vCH2u8 = svuzp1_u8(svreinterpret_u8(svget4_u16(vLow, 2)),
+                                 svreinterpret_u8(svget4_u16(vHigh, 2)));
+
+    svuint8_t vCH3u8 = svuzp1_u8(svreinterpret_u8(svget4_u16(vLow, 3)),
+                                 svreinterpret_u8(svget4_u16(vHigh, 3)));
 
     svst4_u8(vPredu8, pchTarget, svcreate4_u8(vCH0u8, vCH1u8, vCH2u8, vCH3u8));
 }
@@ -302,8 +296,8 @@ void svst4ub_u16(   svbool_t vPredu8,
 __STATIC_INLINE
 svuint16_t __arm_2d_sve_chn_blend_with_mask(svuint16_t vSource, svuint16_t vTarget, svuint16_t vMask)
 {
-    vMask = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask, 255), 
-                        vMask, 
+    vMask = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask, 255),
+                        vMask,
                         svdup_u16(1));
 
     vTarget = vSource * vMask + vTarget * (256 - vMask);
@@ -313,9 +307,9 @@ svuint16_t __arm_2d_sve_chn_blend_with_mask(svuint16_t vSource, svuint16_t vTarg
 /*! \note the hwOpacity range [0, 0x100]
  */
 __STATIC_INLINE
-svuint16_t __arm_2d_sve_chn_blend_with_opacity( svuint16_t vSource, 
-                                                svuint16_t vTarget, 
-                                                uint16_t hwOpacity)
+svuint16_t __arm_2d_sve_chn_blend_with_opacity(svuint16_t vSource,
+                                               svuint16_t vTarget,
+                                               uint16_t hwOpacity)
 {
     svuint16_t vOpacity = svdup_u16(hwOpacity);
 
@@ -327,14 +321,14 @@ svuint16_t __arm_2d_sve_chn_blend_with_opacity( svuint16_t vSource,
  *  \note the hwOpacity range [0, 0x100]
  */
 __STATIC_INLINE
-svuint16_t __arm_2d_sve_chn_blend_with_mask_and_opacity(svuint16_t vSource, 
-                                                        svuint16_t vTarget, 
-                                                        svuint16_t vMask, 
+svuint16_t __arm_2d_sve_chn_blend_with_mask_and_opacity(svuint16_t vSource,
+                                                        svuint16_t vTarget,
+                                                        svuint16_t vMask,
                                                         uint16_t hwOpacity)
 {
-    vMask = svsel(  svcmpeq_n_u16(svptrue_b16(), vMask, 255), 
-                    svdup_u16(hwOpacity), 
-                    (vMask * hwOpacity) >> 8);
+    vMask = svsel(svcmpeq_n_u16(svptrue_b16(), vMask, 255),
+                  svdup_u16(hwOpacity),
+                  (vMask * hwOpacity) >> 8);
 
     vTarget = vSource * vMask + vTarget * (256 - vMask);
     return vTarget >> 8;
@@ -343,19 +337,19 @@ svuint16_t __arm_2d_sve_chn_blend_with_mask_and_opacity(svuint16_t vSource,
 /*! \note the Element range of vMask0/1 is [0, 0xFF]
  */
 __STATIC_INLINE
-svuint16_t __arm_2d_sve_chn_blend_with_masks(   svuint16_t vSource, 
-                                                svuint16_t vTarget, 
-                                                svuint16_t vMask0,
-                                                svuint16_t vMask1)
+svuint16_t __arm_2d_sve_chn_blend_with_masks(svuint16_t vSource,
+                                             svuint16_t vTarget,
+                                             svuint16_t vMask0,
+                                             svuint16_t vMask1)
 {
-    vMask1 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask1, 255), 
-                         vMask1, 
+    vMask1 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask1, 255),
+                         vMask1,
                          svdup_u16(1));
 
-    svuint16_t vMask = 
-        svsel(  svcmpge_n_u16(svptrue_b16(), vMask0, 255), 
-                vMask1, 
-                (vMask0 * vMask1) >> 8);
+    svuint16_t vMask =
+        svsel(svcmpge_n_u16(svptrue_b16(), vMask0, 255),
+              vMask1,
+              (vMask0 * vMask1) >> 8);
 
     vTarget = vSource * vMask + vTarget * (256 - vMask);
     return vTarget >> 8;
@@ -366,24 +360,24 @@ svuint16_t __arm_2d_sve_chn_blend_with_masks(   svuint16_t vSource,
  */
 __STATIC_INLINE
 svuint16_t __arm_2d_sve_chn_blend_with_masks_and_opacity(
-                                                svuint16_t vSource, 
-                                                svuint16_t vTarget, 
-                                                svuint16_t vMask0,
-                                                svuint16_t vMask1,
-                                                uint16_t hwOpacity)
+    svuint16_t vSource,
+    svuint16_t vTarget,
+    svuint16_t vMask0,
+    svuint16_t vMask1,
+    uint16_t hwOpacity)
 {
-    vMask0 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask0, 255), 
-                         vMask0, 
+    vMask0 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask0, 255),
+                         vMask0,
                          svdup_u16(1));
 
-    svuint16_t vMask = 
-        svsel(  svcmpge_n_u16(svptrue_b16(), vMask1, 255), /* >= 255 */
-                vMask0, 
-                (vMask0 * vMask1) >> 8);
+    svuint16_t vMask =
+        svsel(svcmpge_n_u16(svptrue_b16(), vMask1, 255), /* >= 255 */
+              vMask0,
+              (vMask0 * vMask1) >> 8);
 
-    vMask = svsel(  svcmpge_n_u16(svptrue_b16(), vMask, 255), 
-                    svdup_u16(hwOpacity), 
-                    (vMask * hwOpacity) >> 8);
+    vMask = svsel(svcmpge_n_u16(svptrue_b16(), vMask, 255),
+                  svdup_u16(hwOpacity),
+                  (vMask * hwOpacity) >> 8);
 
     vTarget = vSource * vMask + vTarget * (256 - vMask);
     return vTarget >> 8;
@@ -392,25 +386,25 @@ svuint16_t __arm_2d_sve_chn_blend_with_masks_and_opacity(
 /*! \note the Element range of vMask0/1 is [0, 0xFF]
  */
 __STATIC_INLINE
-svuint16_t __arm_2d_sve_chn_blend_with_3masks(  svuint16_t vSource, 
-                                                svuint16_t vTarget, 
-                                                svuint16_t vMask0,
-                                                svuint16_t vMask1,
-                                                svuint16_t vMask2)
+svuint16_t __arm_2d_sve_chn_blend_with_3masks(svuint16_t vSource,
+                                              svuint16_t vTarget,
+                                              svuint16_t vMask0,
+                                              svuint16_t vMask1,
+                                              svuint16_t vMask2)
 {
-    vMask0 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask0, 255), 
-                         vMask0, 
+    vMask0 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask0, 255),
+                         vMask0,
                          svdup_u16(1));
 
-    svuint16_t vMask = 
-        svsel(  svcmpge_n_u16(svptrue_b16(), vMask1, 255), 
-                vMask0, 
-                (vMask0 * vMask1) >> 8);
+    svuint16_t vMask =
+        svsel(svcmpge_n_u16(svptrue_b16(), vMask1, 255),
+              vMask0,
+              (vMask0 * vMask1) >> 8);
 
-    vMask = 
-        svsel(  svcmpge_n_u16(svptrue_b16(), vMask2, 255), 
-                vMask, 
-                (vMask * vMask2) >> 8);
+    vMask =
+        svsel(svcmpge_n_u16(svptrue_b16(), vMask2, 255),
+              vMask,
+              (vMask * vMask2) >> 8);
 
     vTarget = vSource * vMask + vTarget * (256 - vMask);
     return vTarget >> 8;
@@ -421,38 +415,37 @@ svuint16_t __arm_2d_sve_chn_blend_with_3masks(  svuint16_t vSource,
  */
 __STATIC_INLINE
 svuint16_t __arm_2d_sve_chn_blend_with_3masks_and_opacity(
-                                                svuint16_t vSource, 
-                                                svuint16_t vTarget, 
-                                                svuint16_t vMask0,
-                                                svuint16_t vMask1,
-                                                svuint16_t vMask2,
-                                                uint16_t hwOpacity)
+    svuint16_t vSource,
+    svuint16_t vTarget,
+    svuint16_t vMask0,
+    svuint16_t vMask1,
+    svuint16_t vMask2,
+    uint16_t hwOpacity)
 {
-    vMask0 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask0, 255), 
-                         vMask0, 
+    vMask0 = svadd_u16_m(svcmpeq_n_u16(svptrue_b16(), vMask0, 255),
+                         vMask0,
                          svdup_u16(1));
 
-    svuint16_t vMask = 
-        svsel(  svcmpge_n_u16(svptrue_b16(), vMask1, 255), 
-                vMask0, 
-                (vMask0 * vMask1) >> 8);
+    svuint16_t vMask =
+        svsel(svcmpge_n_u16(svptrue_b16(), vMask1, 255),
+              vMask0,
+              (vMask0 * vMask1) >> 8);
 
-    vMask = 
-        svsel(  svcmpge_n_u16(svptrue_b16(), vMask2, 255), 
-                vMask, 
-                (vMask * vMask2) >> 8);
+    vMask =
+        svsel(svcmpge_n_u16(svptrue_b16(), vMask2, 255),
+              vMask,
+              (vMask * vMask2) >> 8);
 
-    vMask = svsel(  svcmpge_n_u16(svptrue_b16(), vMask, 255), 
-                    svdup_u16(hwOpacity), 
-                    (vMask * hwOpacity) >> 8);
+    vMask = svsel(svcmpge_n_u16(svptrue_b16(), vMask, 255),
+                  svdup_u16(hwOpacity),
+                  (vMask * hwOpacity) >> 8);
 
     vTarget = vSource * vMask + vTarget * (256 - vMask);
     return vTarget >> 8;
 }
 
-
-#include "__arm_2d_sve_stride_rgb565.h"
-#include "__arm_2d_sve_stride_cccn888.h"
 #include "__arm_2d_sve_stride_ccca8888.h"
+#include "__arm_2d_sve_stride_cccn888.h"
+#include "__arm_2d_sve_stride_rgb565.h"
 
 #endif
