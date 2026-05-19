@@ -206,6 +206,6 @@
 #define SDL_TARGETING(...)
 #define SDL_RESTRICT __restrict
 #ifndef MIN
-#   define MIN(a, b)    ((a) > (b) ? (b) : (a))
+#define MIN(a, b) ((a) > (b) ? (b) : (a))
 #endif
 #endif /* SDL_SVE2_UTIL_H */

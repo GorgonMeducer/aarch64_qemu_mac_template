@@ -157,7 +157,7 @@ int main(void)
     for (size_t n = 0; n < INPUT_BUFFER_SIZE; n++) {
         uint8_t chData = n; //(n & 0x3) | ((n & ~0x03) << 2);
         pchSource[n] = chData;
-#if 0
+#if 1
         if ((n & 0x03) == 0x03) {
             pchSource[n] = 0xFF;
         }
@@ -180,6 +180,26 @@ int main(void)
         pchTargetMask[n] = 0xFF;
     }
 
+#if 0
+    svuint16_t vInputB;
+    SVT_INIT_VECOTR(vInputB, uint16_t, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
+    vInputB = svmul_n_u16_m(svptrue_b16(), vInputB, 256);
+    
+    svuint16_t vInputT;
+    SVT_INIT_VECOTR(vInputT, uint16_t, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
+    vInputT = svmul_n_u16_m(svptrue_b16(), vInputT, 256);
+    
+
+    svuint8_t vOutputB = svaddhnb_n_u16(vInputB, 1);
+    svuint8_t vOutputT = svaddhnt_n_u16(vOutputB, vInputT, 1);
+
+    SVT_PRINT_VECTOR(vInputB, uint16_t, "%04x");
+    SVT_PRINT_VECTOR(vInputT, uint16_t, "%04x");
+    SVT_PRINT_VECTOR(vOutputB, uint8_t, "%02x");
+    SVT_PRINT_VECTOR(vOutputT, uint8_t, "%02x");
+#endif
+
+#if 1
     svuint16_t vTemp;
     SVT_INIT_VECOTR(vTemp, uint16_t, 0xFF, 0x00, 0xF0, 0x0F);
     vTemp = svreinterpret_u16_u8(svnot_u8_m(svdup_u8(0x00), svptrue_b16(), svreinterpret_u8_u16(vTemp)));
@@ -210,18 +230,18 @@ int main(void)
     sdl_sve_abgr8888_blend_to_rgb565
     */
 
-    sdl_sve_rgb565_blend_with_opacity(
+    sdl_sve_a123_blend_to_321a_copy_alpha(
         pchSource,
-        INPUT_BUFFER_SIZE / 4,
+        INPUT_BUFFER_SIZE / 2,
         pchTarget,
-        OUTPUT_BUFFER_SIZE / 4,
+        OUTPUT_BUFFER_SIZE / 2,
         PIXEL_COUNT / 2,
-        2,
-        255);
+        2);
 
-    SVT_PRINT_BUFFER(pchSource, INPUT_BUFFER_SIZE, uint16_t, "%04" PRIx16, 16);
-    SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE, uint16_t, "%04" PRIx16, 16);
+    SVT_PRINT_BUFFER(pchSource, INPUT_BUFFER_SIZE, uint32_t, "%08" PRIx16, 16);
+    SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE, uint32_t, "%08" PRIx16, 16);
     // SVT_PRINT_BUFFER(pchTarget, OUTPUT_BUFFER_SIZE / 2, uint16_t, "%04"PRIx16, 16);
+#endif
 
     free(pchSource);
     free(pchTarget);
