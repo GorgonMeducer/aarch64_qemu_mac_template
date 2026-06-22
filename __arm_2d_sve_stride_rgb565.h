@@ -22,7 +22,7 @@
  * Colour Filling                                                             *
  *----------------------------------------------------------------------------*/
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb16_fill_colour(uint16_t *__RESTRICT phwTarget,
                                     size_t uStride,
                                     uint16_t hwColour)
@@ -41,7 +41,7 @@ void __arm_2d_sve_rgb16_fill_colour(uint16_t *__RESTRICT phwTarget,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb565_fill_colour_with_opacity(
     uint16_t *__RESTRICT phwTarget,
     size_t uStride,
@@ -72,7 +72,7 @@ void __arm_2d_sve_rgb565_fill_colour_with_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb565_fill_colour_with_source_mask(
     uint16_t *__RESTRICT phwTarget,
     uint8_t *__RESTRICT pchMask,
@@ -106,7 +106,7 @@ void __arm_2d_sve_rgb565_fill_colour_with_source_mask(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb565_fill_colour_with_source_mask_and_opacity(
     uint16_t *__RESTRICT phwTarget,
     uint8_t *__RESTRICT pchMask,
@@ -142,7 +142,7 @@ void __arm_2d_sve_rgb565_fill_colour_with_source_mask_and_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb565_fill_colour_with_masks(
     uint16_t *__RESTRICT phwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -181,7 +181,7 @@ void __arm_2d_sve_rgb565_fill_colour_with_masks(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb565_fill_colour_with_masks_and_opacity(
     uint16_t *__RESTRICT phwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -226,7 +226,7 @@ void __arm_2d_sve_rgb565_fill_colour_with_masks_and_opacity(
  *----------------------------------------------------------------------------*/
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb565_reverse_fill_colour_with_source_mask(
     uint16_t *__RESTRICT phwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -264,7 +264,7 @@ void __arm_2d_sve_rgb565_reverse_fill_colour_with_source_mask(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb565_reverse_fill_colour_with_source_mask_and_opacity(
     uint16_t *__RESTRICT phwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -304,7 +304,7 @@ void __arm_2d_sve_rgb565_reverse_fill_colour_with_source_mask_and_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb565_reverse_fill_colour_with_masks(
     uint16_t *__RESTRICT phwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -346,7 +346,7 @@ void __arm_2d_sve_rgb565_reverse_fill_colour_with_masks(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_rgb565_reverse_fill_colour_with_masks_and_opacity(
     uint16_t *__RESTRICT phwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -394,7 +394,7 @@ void __arm_2d_sve_rgb565_reverse_fill_colour_with_masks_and_opacity(
  *----------------------------------------------------------------------------*/
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb16_blend(uint16_t *__RESTRICT phwSource,
                               uint16_t *__RESTRICT phwTarget,
                               size_t uStride)
@@ -415,7 +415,7 @@ void __arm_2d_sve_rgb16_blend(uint16_t *__RESTRICT phwSource,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_blend_with_opacity(uint16_t *__RESTRICT phwSource,
                                             uint16_t *__RESTRICT phwTarget,
                                             size_t uStride,
@@ -445,7 +445,7 @@ void __arm_2d_sve_rgb565_blend_with_opacity(uint16_t *__RESTRICT phwSource,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_blend_with_source_mask(uint16_t *__RESTRICT phwSource,
                                                 uint8_t *__RESTRICT pchSourceMask,
                                                 uint16_t *__RESTRICT phwTarget,
@@ -487,7 +487,7 @@ void __arm_2d_sve_rgb565_blend_with_source_mask(uint16_t *__RESTRICT phwSource,
                                                (__stride))
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_blend_with_source_mask_and_opacity(
     uint16_t *__RESTRICT phwSource,
     uint8_t *__RESTRICT pchSourceMask,
@@ -536,7 +536,7 @@ void __arm_2d_sve_rgb565_blend_with_source_mask_and_opacity(
         (__opacity))
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_blend_with_masks(uint16_t *__RESTRICT phwSource,
                                           uint8_t *__RESTRICT pchSourceMask,
                                           uint16_t *__RESTRICT phwTarget,
@@ -573,7 +573,7 @@ void __arm_2d_sve_rgb565_blend_with_masks(uint16_t *__RESTRICT phwSource,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_blend_with_masks_and_opacity(
     uint16_t *__RESTRICT phwSource,
     uint8_t *__RESTRICT pchSourceMask,
@@ -617,7 +617,7 @@ void __arm_2d_sve_rgb565_blend_with_masks_and_opacity(
  *----------------------------------------------------------------------------*/
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_reverse_blend(uint16_t *__RESTRICT phwSource,
                                        uint16_t *__RESTRICT phwTarget,
                                        size_t uStride)
@@ -648,7 +648,7 @@ void __arm_2d_sve_rgb565_reverse_blend(uint16_t *__RESTRICT phwSource,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_reverse_blend_with_opacity(
     uint16_t *__RESTRICT phwSource,
     uint16_t *__RESTRICT phwTarget,
@@ -684,7 +684,7 @@ void __arm_2d_sve_rgb565_reverse_blend_with_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_reverse_blend_with_source_mask(
     uint16_t *__RESTRICT phwSource,
     uint8_t *__RESTRICT pchSourceMask,
@@ -724,7 +724,7 @@ void __arm_2d_sve_rgb565_reverse_blend_with_source_mask(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_reverse_blend_with_source_mask_and_opacity(
     uint16_t *__RESTRICT phwSource,
     uint8_t *__RESTRICT pchSourceMask,
@@ -766,7 +766,7 @@ void __arm_2d_sve_rgb565_reverse_blend_with_source_mask_and_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_reverse_blend_with_target_mask(
     uint16_t *__RESTRICT phwSource,
     uint16_t *__RESTRICT phwTarget,
@@ -805,7 +805,7 @@ void __arm_2d_sve_rgb565_reverse_blend_with_target_mask(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_reverse_blend_with_target_mask_and_opacity(
     uint16_t *__RESTRICT phwSource,
     uint16_t *__RESTRICT phwTarget,
@@ -846,7 +846,7 @@ void __arm_2d_sve_rgb565_reverse_blend_with_target_mask_and_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_reverse_blend_with_masks(
     uint16_t *__RESTRICT phwSource,
     uint8_t *__RESTRICT pchSourceMask,
@@ -891,7 +891,7 @@ void __arm_2d_sve_rgb565_reverse_blend_with_masks(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_rgb565_reverse_blend_with_masks_and_opacity(
     uint16_t *__RESTRICT phwSource,
     uint8_t *__RESTRICT pchSourceMask,

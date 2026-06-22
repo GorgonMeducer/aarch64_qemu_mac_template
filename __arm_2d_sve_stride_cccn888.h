@@ -22,7 +22,7 @@
  * Colour Filling                                                             *
  *----------------------------------------------------------------------------*/
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_fill_colour(uint32_t *__RESTRICT pwTarget,
                                       size_t uStride,
                                       uint32_t wColour)
@@ -41,7 +41,7 @@ void __arm_2d_sve_cccn888_fill_colour(uint32_t *__RESTRICT pwTarget,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_fill_colour_with_opacity(
     uint32_t *__RESTRICT pwTarget,
     size_t uStride,
@@ -93,7 +93,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_fill_colour_with_source_mask(
     uint32_t *__RESTRICT pwTarget,
     uint8_t *__RESTRICT pchMask,
@@ -150,7 +150,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_fill_colour_with_source_mask_and_opacity(
     uint32_t *__RESTRICT pwTarget,
     uint8_t *__RESTRICT pchMask,
@@ -212,7 +212,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_source_mask_and_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_fill_colour_with_masks(
     uint32_t *__RESTRICT pwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -276,7 +276,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_fill_colour_with_masks_and_opacity(
     uint32_t *__RESTRICT pwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -349,7 +349,7 @@ void __arm_2d_sve_cccn888_fill_colour_with_masks_and_opacity(
  *----------------------------------------------------------------------------*/
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask(
     uint32_t *__RESTRICT pwTarget,
     uint8_t *__RESTRICT pchMask,
@@ -410,7 +410,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask_and_opacity(
     uint32_t *__RESTRICT pwTarget,
     uint8_t *__RESTRICT pchMask,
@@ -476,7 +476,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_source_mask_and_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks(
     uint32_t *__RESTRICT pwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -543,7 +543,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1)
+LV_NONNULL(1)
 void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks_and_opacity(
     uint32_t *__RESTRICT pwTarget,
     uint8_t *__RESTRICT pchSourceMask,
@@ -619,7 +619,7 @@ void __arm_2d_sve_cccn888_reverse_fill_colour_with_masks_and_opacity(
  *----------------------------------------------------------------------------*/
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_blend(uint32_t *__RESTRICT pwSource,
                                 uint32_t *__RESTRICT pwTarget,
                                 size_t uStride)
@@ -640,7 +640,7 @@ void __arm_2d_sve_cccn888_blend(uint32_t *__RESTRICT pwSource,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_blend_with_opacity(uint32_t *__RESTRICT pwSource,
                                              uint32_t *__RESTRICT pwTarget,
                                              size_t uStride,
@@ -694,7 +694,7 @@ void __arm_2d_sve_cccn888_blend_with_opacity(uint32_t *__RESTRICT pwSource,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_blend_with_source_mask(uint32_t *__RESTRICT pwSource,
                                                  uint8_t *__RESTRICT pchMask,
                                                  uint32_t *__RESTRICT pwTarget,
@@ -763,7 +763,7 @@ void __arm_2d_sve_cccn888_blend_with_source_mask(uint32_t *__RESTRICT pwSource,
                                                 (__stride))
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_blend_with_source_mask_and_opacity(
     uint32_t *__RESTRICT pwSource,
     uint8_t *__RESTRICT pchMask,
@@ -839,7 +839,7 @@ void __arm_2d_sve_cccn888_blend_with_source_mask_and_opacity(
         (__opacity))
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_blend_with_masks(uint32_t *__RESTRICT pwSource,
                                            uint8_t *__RESTRICT pchSourceMask,
                                            uint32_t *__RESTRICT pwTarget,
@@ -904,7 +904,7 @@ void __arm_2d_sve_cccn888_blend_with_masks(uint32_t *__RESTRICT pwSource,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_blend_with_masks_and_opacity(
     uint32_t *__RESTRICT pwSource,
     uint8_t *__RESTRICT pchSourceMask,
@@ -980,7 +980,7 @@ void __arm_2d_sve_cccn888_blend_with_masks_and_opacity(
  *----------------------------------------------------------------------------*/
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_reverse_blend(uint32_t *__RESTRICT pwSource,
                                         uint32_t *__RESTRICT pwTarget,
                                         size_t uStride)
@@ -1026,7 +1026,7 @@ void __arm_2d_sve_cccn888_reverse_blend(uint32_t *__RESTRICT pwSource,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_reverse_blend_with_opacity(
     uint32_t *__RESTRICT pwSource,
     uint32_t *__RESTRICT pwTarget,
@@ -1087,7 +1087,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_reverse_blend_with_source_mask(
     uint32_t *__RESTRICT pwSource,
     uint8_t *__RESTRICT pchSourceMask,
@@ -1153,7 +1153,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_reverse_blend_with_source_mask_and_opacity(
     uint32_t *__RESTRICT pwSource,
     uint8_t *__RESTRICT pchSourceMask,
@@ -1224,7 +1224,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_source_mask_and_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_reverse_blend_with_target_mask(
     uint32_t *__RESTRICT pwSource,
     uint32_t *__RESTRICT pwTarget,
@@ -1289,7 +1289,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_reverse_blend_with_target_mask_and_opacity(
     uint32_t *__RESTRICT pwSource,
     uint32_t *__RESTRICT pwTarget,
@@ -1359,7 +1359,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_target_mask_and_opacity(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_reverse_blend_with_masks(
     uint32_t *__RESTRICT pwSource,
     uint8_t *__RESTRICT pchSourceMask,
@@ -1431,7 +1431,7 @@ void __arm_2d_sve_cccn888_reverse_blend_with_masks(
 }
 
 __STATIC_INLINE
-ARM_NONNULL(1, 2)
+LV_NONNULL(1, 2)
 void __arm_2d_sve_cccn888_reverse_blend_with_masks_and_opacity(
     uint32_t *__RESTRICT pwSource,
     uint8_t *__RESTRICT pchSourceMask,

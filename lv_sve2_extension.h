@@ -19,18 +19,18 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-#if !defined(SDL_SVE2_EXTENSION_H) //&& (defined(__ARM_FEATURE_SVE2) && __ARM_FEATURE_SVE2)
-#define SDL_SVE2_EXTENSION_H
+#if !defined(LV_SVE2_EXTENSION_H) //&& (defined(__ARM_FEATURE_SVE2) && __ARM_FEATURE_SVE2)
+#define LV_SVE2_EXTENSION_H
 
-#include "SDL_sve2_util.h"
+#include "lv_sve2_util.h"
 #include <arm_sve.h>
 #include <stdint.h>
 
 /*!
  * \brief a wrapper for __attribute__((nonnull))
  */
-#ifndef ARM_NONNULL
-#define ARM_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
+#ifndef LV_NONNULL
+#define LV_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
 #endif
 
 #define svlenu8()  svcntb_pat(SV_ALL)
@@ -43,7 +43,7 @@
 #define svlens32() svlenu32()
 #define svlens64() svlenu64()
 
-#define sdl_sve_stride_loop_accc8888(ma_stride_size, ma_pred_name)       \
+#define lv_sve_stride_loop_accc8888(ma_stride_size, ma_pred_name)       \
     for (svbool_t ma_pred_name, *pTemp = &ma_pred_name;                  \
          pTemp != NULL;                                                  \
          pTemp = NULL)                                                   \
@@ -56,10 +56,10 @@
              });                                                         \
              SVE_SAFE_NAME(n) += sve_iteration_advance)
 
-#define sdl_sve_stride_loop_rgb32(ma_stride_size, ma_pred_name) \
-    sdl_sve_stride_loop_accc8888(ma_stride_size, ma_pred_name)
+#define lv_sve_stride_loop_rgb32(ma_stride_size, ma_pred_name) \
+    lv_sve_stride_loop_accc8888(ma_stride_size, ma_pred_name)
 
-#define sdl_sve_stride_loop_rgb16(ma_stride_size, ma_pred_name)           \
+#define lv_sve_stride_loop_rgb16(ma_stride_size, ma_pred_name)           \
     for (svbool_t ma_pred_name, *pTemp = &ma_pred_name;                   \
          pTemp != NULL;                                                   \
          pTemp = NULL)                                                    \
@@ -72,7 +72,7 @@
              });                                                          \
              SVE_SAFE_NAME(n) += sve_iteration_advance)
 
-#define sdl_sve_pixel_ccc_foreach_chn(ma_source_u16x3,                    \
+#define lv_sve_pixel_ccc_foreach_chn(ma_source_u16x3,                    \
                                       ma_target_u16x3,                    \
                                       ...)                                \
     do {                                                                  \
@@ -110,7 +110,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_accc_foreach_chn012(ma_source_u16x4,                \
+#define lv_sve_pixel_accc_foreach_chn012(ma_source_u16x4,                \
                                           ma_target_u16x4,                \
                                           ...)                            \
     do {                                                                  \
@@ -148,7 +148,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_accc_foreach_chn(ma_source_u16x4,                   \
+#define lv_sve_pixel_accc_foreach_chn(ma_source_u16x4,                   \
                                        ma_target_u16x4,                   \
                                        ...)                               \
     do {                                                                  \
@@ -200,7 +200,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn(ma_source_u16x4,                  \
+#define lv_sve_pixel_u16x4_foreach_chn(ma_source_u16x4,                  \
                                         ma_target_u16x4,                  \
                                         ...)                              \
     do {                                                                  \
@@ -248,7 +248,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn_src_dst_rev(ma_source_u16x4,      \
+#define lv_sve_pixel_u16x4_foreach_chn_src_dst_rev(ma_source_u16x4,      \
                                                     ma_target_u16x4,      \
                                                     ...)                  \
     do {                                                                  \
@@ -304,7 +304,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn_accc_ccca(ma_source_u16x4,        \
+#define lv_sve_pixel_u16x4_foreach_chn_accc_ccca(ma_source_u16x4,        \
                                                   ma_target_u16x4,        \
                                                   ...)                    \
     do {                                                                  \
@@ -360,7 +360,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn_ccca_accc(ma_source_u16x4,        \
+#define lv_sve_pixel_u16x4_foreach_chn_ccca_accc(ma_source_u16x4,        \
                                                   ma_target_u16x4,        \
                                                   ...)                    \
     do {                                                                  \
@@ -416,7 +416,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn_a123_a321(ma_source_u16x4,        \
+#define lv_sve_pixel_u16x4_foreach_chn_a123_a321(ma_source_u16x4,        \
                                                   ma_target_u16x4,        \
                                                   ...)                    \
     do {                                                                  \
@@ -472,7 +472,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn_123a_321a(ma_source_u16x4,        \
+#define lv_sve_pixel_u16x4_foreach_chn_123a_321a(ma_source_u16x4,        \
                                                   ma_target_u16x4,        \
                                                   ...)                    \
     do {                                                                  \
@@ -528,7 +528,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn_argb_rgb565(ma_source_u16x4,      \
+#define lv_sve_pixel_u16x4_foreach_chn_argb_rgb565(ma_source_u16x4,      \
                                                     ma_target_u16x3,      \
                                                     ...)                  \
     do {                                                                  \
@@ -572,7 +572,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn_rgba_rgb565(ma_source_u16x4,      \
+#define lv_sve_pixel_u16x4_foreach_chn_rgba_rgb565(ma_source_u16x4,      \
                                                     ma_target_u16x3,      \
                                                     ...)                  \
     do {                                                                  \
@@ -616,7 +616,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn_bgra_rgb565(ma_source_u16x4,      \
+#define lv_sve_pixel_u16x4_foreach_chn_bgra_rgb565(ma_source_u16x4,      \
                                                     ma_target_u16x3,      \
                                                     ...)                  \
     do {                                                                  \
@@ -660,7 +660,7 @@
         } while (0);                                                      \
     } while (0)
 
-#define sdl_sve_pixel_u16x4_foreach_chn_abgr_rgb565(ma_source_u16x4,      \
+#define lv_sve_pixel_u16x4_foreach_chn_abgr_rgb565(ma_source_u16x4,      \
                                                     ma_target_u16x3,      \
                                                     ...)                  \
     do {                                                                  \
@@ -704,8 +704,8 @@
         } while (0);                                                      \
     } while (0)
 
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16x3_t sdl_sve_rgb565_unpack(svuint16_t vPixels)
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16x3_t lv_sve_rgb565_unpack(svuint16_t vPixels)
 {
     svuint16_t vBlue = svand_n_u16_m(svptrue_b16(), vPixels, 0x1F);
     svuint16_t vGreen = svand_n_u16_m(svptrue_b16(), vPixels, (0x3F << 5));
@@ -716,8 +716,8 @@ static inline svuint16x3_t sdl_sve_rgb565_unpack(svuint16_t vPixels)
                          svlsr_n_u16_m(svptrue_b16(), vRed, 8));
 }
 
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_rgb565_pack(svuint16x3_t vRGB16x3)
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_rgb565_pack(svuint16x3_t vRGB16x3)
 {
     svuint16_t vRed = svlsr_n_u16_m(svptrue_b16(), svget3_u16(vRGB16x3, 0), 3);
     svuint16_t vGreen = svlsl_n_u16_m(svptrue_b16(),
@@ -739,8 +739,8 @@ static inline svuint16_t sdl_sve_rgb565_pack(svuint16x3_t vRGB16x3)
     //     |   ((svget3_u16(vRGB16x3, 2) & (0x1F << 3)) << 8);
 }
 
-SDL_TARGETING("arch=armv8-a+sve2")
-ARM_NONNULL(2, 3, 4)
+LV_TARGETING("arch=armv8-a+sve2")
+LV_NONNULL(2, 3, 4)
 static inline void svld3rgb565_u16(svbool_t vPredu8,
                                    uint16_t *phwSource,
                                    svuint16x3_t *pvLow,
@@ -754,25 +754,25 @@ static inline void svld3rgb565_u16(svbool_t vPredu8,
     svuint16_t vHighByteLowHalf = svunpklo_u16(svget2_u8(vInput8x2, 1));
     svuint16_t vHighByteHighHalf = svunpkhi_u16(svget2_u8(vInput8x2, 1));
 
-    //*pvLow = sdl_sve_rgb565_unpack  (   vLowByteLowHalf
+    //*pvLow = lv_sve_rgb565_unpack  (   vLowByteLowHalf
     //                                |   (vHighByteLowHalf << 8));
-    *pvLow = sdl_sve_rgb565_unpack(
+    *pvLow = lv_sve_rgb565_unpack(
         svorr_u16_m(svptrue_b16(),
                     vLowByteLowHalf,
                     //(vHighByteLowHalf << 8)
                     svlsl_n_u16_m(svptrue_b16(), vHighByteLowHalf, 8)));
 
-    //*pvHigh = sdl_sve_rgb565_unpack (   vLowByteHighHalf
+    //*pvHigh = lv_sve_rgb565_unpack (   vLowByteHighHalf
     //                                |   (vHighByteHighHalf << 8));
-    *pvHigh = sdl_sve_rgb565_unpack(
+    *pvHigh = lv_sve_rgb565_unpack(
         svorr_u16_m(svptrue_b16(),
                     vLowByteHighHalf,
                     //(vHighByteHighHalf << 8)
                     svlsl_n_u16_m(svptrue_b16(), vHighByteHighHalf, 8)));
 }
 
-SDL_TARGETING("arch=armv8-a+sve2")
-ARM_NONNULL(2)
+LV_TARGETING("arch=armv8-a+sve2")
+LV_NONNULL(2)
 static inline void svst3rgb565_u16(svbool_t vPredu8,
                                    uint16_t *phwTarget,
                                    svuint16x3_t vLow,
@@ -783,7 +783,7 @@ static inline void svst3rgb565_u16(svbool_t vPredu8,
 
     /* pack low half pixels */
     do {
-        svuint16_t vPixel = sdl_sve_rgb565_pack(vLow);
+        svuint16_t vPixel = lv_sve_rgb565_pack(vLow);
 
         // vLowByteLowHalf = vPixel & 0xFF;
         vLowByteLowHalf = svand_n_u16_m(svptrue_b16(), vPixel, 0xFF);
@@ -797,7 +797,7 @@ static inline void svst3rgb565_u16(svbool_t vPredu8,
 
     /* pack high half pixels */
     do {
-        svuint16_t vPixel = sdl_sve_rgb565_pack(vHigh);
+        svuint16_t vPixel = lv_sve_rgb565_pack(vHigh);
 
         // vLowByteHighHalf = vPixel & 0xFF;
         vLowByteHighHalf = svand_n_u16_m(svptrue_b16(), vPixel, 0xFF);
@@ -855,8 +855,8 @@ static inline void svst3rgb565_u16(svbool_t vPredu8,
         svst4_u8((ma_pred), (ma_dst_ptr), svcreate4_u8(vCH0u8, vCH1u8, vCH2u8, vCH3u8));     \
     } while (0)
 #else
-SDL_TARGETING("arch=armv8-a+sve2")
-ARM_NONNULL(2, 3, 4)
+LV_TARGETING("arch=armv8-a+sve2")
+LV_NONNULL(2, 3, 4)
 static inline void svld4ub_u16(svbool_t vPredu8,
                                uint8_t *pchSource,
                                svuint16x4_t *pvLow,
@@ -875,8 +875,8 @@ static inline void svld4ub_u16(svbool_t vPredu8,
     *pvHigh = svset4_u16(*pvHigh, 3, svunpkhi_u16(svget4_u8(vInput8x4, 3)));
 }
 
-SDL_TARGETING("arch=armv8-a+sve2")
-ARM_NONNULL(2)
+LV_TARGETING("arch=armv8-a+sve2")
+LV_NONNULL(2)
 static inline void svst4ub_u16(svbool_t vPredu8,
                                uint8_t *pchTarget,
                                svuint16x4_t vLow,
@@ -901,8 +901,8 @@ static inline void svst4ub_u16(svbool_t vPredu8,
 
 /*! \note the Element range of vMask is [0, 0xFF]
  */
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_chn_blend_with_mask(svuint16_t vSource,
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_chn_blend_with_mask(svuint16_t vSource,
                                                      svuint16_t vTarget,
                                                      svuint16_t vMask)
 {
@@ -926,8 +926,8 @@ static inline svuint16_t sdl_sve_chn_blend_with_mask(svuint16_t vSource,
 
 /*! \note the Element range of vMask is [0, 0xFF]
  */
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_chn_blend_with_mask_fast(svuint16_t vSource,
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_chn_blend_with_mask_fast(svuint16_t vSource,
                                                           svuint16_t vTarget,
                                                           svuint16_t vMask)
 {
@@ -945,8 +945,8 @@ static inline svuint16_t sdl_sve_chn_blend_with_mask_fast(svuint16_t vSource,
 
 /*! \note the hwOpacity range [0, 0x100]
  */
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_chn_blend_with_opacity(svuint16_t vSource,
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_chn_blend_with_opacity(svuint16_t vSource,
                                                         svuint16_t vTarget,
                                                         uint16_t hwOpacity)
 {
@@ -964,8 +964,8 @@ static inline svuint16_t sdl_sve_chn_blend_with_opacity(svuint16_t vSource,
 
 /*! \note the hwOpacity range [0, 0x100]
  */
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_chn_blend_with_opacity_fast(svuint16_t vSource,
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_chn_blend_with_opacity_fast(svuint16_t vSource,
                                                              svuint16_t vTarget,
                                                              uint16_t hwOpacity)
 {
@@ -982,8 +982,8 @@ static inline svuint16_t sdl_sve_chn_blend_with_opacity_fast(svuint16_t vSource,
 /*! \note the Element range of vMask is [0, 0xFF]
  *  \note the hwOpacity range [0, 0x100]
  */
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_chn_blend_with_mask_and_opacity(svuint16_t vSource,
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_chn_blend_with_mask_and_opacity(svuint16_t vSource,
                                                                  svuint16_t vTarget,
                                                                  svuint16_t vMask,
                                                                  uint16_t hwOpacity)
@@ -1009,8 +1009,8 @@ static inline svuint16_t sdl_sve_chn_blend_with_mask_and_opacity(svuint16_t vSou
 
 /*! \note the Element range of vMask0/1 is [0, 0xFF]
  */
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_chn_blend_with_masks(svuint16_t vSource,
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_chn_blend_with_masks(svuint16_t vSource,
                                                       svuint16_t vTarget,
                                                       svuint16_t vMask0,
                                                       svuint16_t vMask1)
@@ -1042,8 +1042,8 @@ static inline svuint16_t sdl_sve_chn_blend_with_masks(svuint16_t vSource,
 /*! \note the Element range of vMask0/1 is [0, 0xFF]
  *  \note the hwOpacity range [0, 0x100]
  */
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_chn_blend_with_masks_and_opacity(
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_chn_blend_with_masks_and_opacity(
     svuint16_t vSource,
     svuint16_t vTarget,
     svuint16_t vMask0,
@@ -1084,8 +1084,8 @@ static inline svuint16_t sdl_sve_chn_blend_with_masks_and_opacity(
 
 /*! \note the Element range of vMask0/1 is [0, 0xFF]
  */
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_chn_blend_with_3masks(svuint16_t vSource,
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_chn_blend_with_3masks(svuint16_t vSource,
                                                        svuint16_t vTarget,
                                                        svuint16_t vMask0,
                                                        svuint16_t vMask1,
@@ -1126,8 +1126,8 @@ static inline svuint16_t sdl_sve_chn_blend_with_3masks(svuint16_t vSource,
 /*! \note the Element range of vMask0/1 is [0, 0xFF]
  *  \note the hwOpacity range [0, 0x100]
  */
-SDL_TARGETING("arch=armv8-a+sve2")
-static inline svuint16_t sdl_sve_chn_blend_with_3masks_and_opacity(
+LV_TARGETING("arch=armv8-a+sve2")
+static inline svuint16_t lv_sve_chn_blend_with_3masks_and_opacity(
     svuint16_t vSource,
     svuint16_t vTarget,
     svuint16_t vMask0,
@@ -1175,4 +1175,4 @@ static inline svuint16_t sdl_sve_chn_blend_with_3masks_and_opacity(
     return svlsr_n_u16_m(svptrue_b16(), vTarget, 8); // vTarget >> 8;
 }
 
-#endif /* SDL_SVE2_EXTENSION_H */
+#endif /* LV_SVE2_EXTENSION_H */

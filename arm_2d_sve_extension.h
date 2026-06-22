@@ -28,8 +28,8 @@
 /*!
  * \brief a wrapper for __attribute__((nonnull))
  */
-#ifndef ARM_NONNULL
-#define ARM_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
+#ifndef LV_NONNULL
+#define LV_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
 #endif
 
 #ifndef __RESTRICT
@@ -191,7 +191,7 @@ svuint16_t __arm_2d_sve_rgb565_pack(svuint16x3_t vRGB16x3)
 }
 
 __STATIC_INLINE
-ARM_NONNULL(2, 3, 4)
+LV_NONNULL(2, 3, 4)
 void svld3rgb565_u16(svbool_t vPredu8,
                      uint16_t *phwSource,
                      svuint16x3_t *pvLow,
@@ -210,7 +210,7 @@ void svld3rgb565_u16(svbool_t vPredu8,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(2)
+LV_NONNULL(2)
 void svst3rgb565_u16(svbool_t vPredu8,
                      uint16_t *phwTarget,
                      svuint16x3_t vLow,
@@ -249,7 +249,7 @@ void svst3rgb565_u16(svbool_t vPredu8,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(2, 3, 4)
+LV_NONNULL(2, 3, 4)
 void svld4ub_u16(svbool_t vPredu8,
                  uint8_t *pchSource,
                  svuint16x4_t *pvLow,
@@ -269,7 +269,7 @@ void svld4ub_u16(svbool_t vPredu8,
 }
 
 __STATIC_INLINE
-ARM_NONNULL(2)
+LV_NONNULL(2)
 void svst4ub_u16(svbool_t vPredu8,
                  uint8_t *pchTarget,
                  svuint16x4_t vLow,

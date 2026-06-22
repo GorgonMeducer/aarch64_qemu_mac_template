@@ -19,8 +19,8 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef SDL_SVE2_UTIL_H
-#define SDL_SVE2_UTIL_H
+#ifndef LV_SVE2_UTIL_H
+#define LV_SVE2_UTIL_H
 
 #undef SVE_0_CONNECT2
 #undef SVE_0_CONNECT3
@@ -118,10 +118,10 @@
     do {                                                                            \
         uint8_t SVE_SAFE_NAME(chVectorBuffer)[svcntb_pat(SV_ALL)];                  \
                                                                                     \
-        memset(SVE_SAFE_NAME(chVectorBuffer), /* This should NOT be SDL_memset() */ \
+        memset(SVE_SAFE_NAME(chVectorBuffer), /* This should NOT be LV_memset() */ \
                0,                                                                   \
                sizeof(SVE_SAFE_NAME(chVectorBuffer)));                              \
-        memcpy(SVE_SAFE_NAME(chVectorBuffer), /* This should NOT be SDL_memcpy() */ \
+        memcpy(SVE_SAFE_NAME(chVectorBuffer), /* This should NOT be LV_memcpy() */ \
                (ma_ELEMENT_T[]){ __VA_ARGS__ },                                     \
                MIN(sizeof(SVE_SAFE_NAME(chVectorBuffer)),                           \
                    sizeof((ma_ELEMENT_T[]){ __VA_ARGS__ })));                       \
@@ -133,11 +133,11 @@
 #define SVT_INIT_PRED(ma_PREDICT, ...)                                        \
     do {                                                                      \
         uint8_t SVE_SAFE_NAME(chBuffer)[svlen(svundef_u64())];                \
-        memset(SVE_SAFE_NAME(chBuffer), /* This should NOT be SDL_memset() */ \
+        memset(SVE_SAFE_NAME(chBuffer), /* This should NOT be LV_memset() */ \
                0,                                                             \
                sizeof(SVE_SAFE_NAME(chBuffer)));                              \
                                                                               \
-        memcpy(SVE_SAFE_NAME(chBuffer), /* This should NOT be SDL_memcpy() */ \
+        memcpy(SVE_SAFE_NAME(chBuffer), /* This should NOT be LV_memcpy() */ \
                (uint8_t[]){ __VA_ARGS__ },                                    \
                MIN(sizeof(SVE_SAFE_NAME(chBuffer)),                           \
                    sizeof((uint8_t[]){ __VA_ARGS__ })));                      \
@@ -149,7 +149,7 @@
     do {                                                                      \
         printf("%8s\t[", #ma_PREDICT);                                        \
         uint16_t SVE_SAFE_NAME(hwBuffer)[svlen(svundef_u64()) / 2];           \
-        memset(SVE_SAFE_NAME(hwBuffer), /* This should NOT be SDL_memset() */ \
+        memset(SVE_SAFE_NAME(hwBuffer), /* This should NOT be LV_memset() */ \
                0,                                                             \
                sizeof(SVE_SAFE_NAME(hwBuffer)));                              \
         *(volatile svbool_t *)SVE_SAFE_NAME(hwBuffer) = (ma_PREDICT);         \
@@ -203,9 +203,9 @@
                                                                                  \
     } while (0)
 
-#define SDL_TARGETING(...)
-#define SDL_RESTRICT __restrict
+#define LV_TARGETING(...)       __attribute__((target(__VA_ARGS__)))
+#define LV_RESTRICT __restrict
 #ifndef MIN
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #endif
-#endif /* SDL_SVE2_UTIL_H */
+#endif /* LV_SVE2_UTIL_H */

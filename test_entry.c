@@ -12,36 +12,36 @@
 // #include "arm_2d_sve_extension.h"
 
 #if 1
-#undef sdl_sve_rgb32_blend_op_fill_alpha
-#define sdl_sve_rgb32_blend_op_fill_alpha(ma_alpha_chn_idx)              \
+#undef lv_sve_rgb32_blend_op_fill_alpha
+#define lv_sve_rgb32_blend_op_fill_alpha(ma_alpha_chn_idx)              \
     if (sve_src_chn_idx == (ma_alpha_chn_idx)) {                         \
         /* fill alpha */                                                 \
         sve_target_u16 = svdup_u16(0xFF);                                \
     } else {                                                             \
         svuint16_t vMask = svget4(sve_source_u16x4, (ma_alpha_chn_idx)); \
-        sve_target_u16 = sdl_sve_chn_blend_with_mask(sve_source_u16,     \
+        sve_target_u16 = lv_sve_chn_blend_with_mask(sve_source_u16,     \
                                                      sve_target_u16,     \
                                                      vMask);             \
     }
 
-#undef sdl_sve_rgb32_blend_op_copy_alpha
-#define sdl_sve_rgb32_blend_op_copy_alpha(ma_alpha_chn_idx)              \
+#undef lv_sve_rgb32_blend_op_copy_alpha
+#define lv_sve_rgb32_blend_op_copy_alpha(ma_alpha_chn_idx)              \
     if (sve_src_chn_idx == (ma_alpha_chn_idx)) {                         \
-        sve_target_u16 = sdl_sve_chn_blend_with_mask(svdup_u16(0xFF),    \
+        sve_target_u16 = lv_sve_chn_blend_with_mask(svdup_u16(0xFF),    \
                                                      sve_target_u16,     \
                                                      sve_source_u16);    \
     } else {                                                             \
         svuint16_t vMask = svget4(sve_source_u16x4, (ma_alpha_chn_idx)); \
-        sve_target_u16 = sdl_sve_chn_blend_with_mask(sve_source_u16,     \
+        sve_target_u16 = lv_sve_chn_blend_with_mask(sve_source_u16,     \
                                                      sve_target_u16,     \
                                                      vMask);             \
     }
 
-#undef sdl_sve_rgb32_blend_to_rgb565_op
-#define sdl_sve_rgb32_blend_to_rgb565_op(ma_alpha_chn_idx)               \
+#undef lv_sve_rgb32_blend_to_rgb565_op
+#define lv_sve_rgb32_blend_to_rgb565_op(ma_alpha_chn_idx)               \
     do {                                                                 \
         svuint16_t vMask = svget4(sve_source_u16x4, (ma_alpha_chn_idx)); \
-        sve_target_u16 = sdl_sve_chn_blend_with_mask(sve_source_u16,     \
+        sve_target_u16 = lv_sve_chn_blend_with_mask(sve_source_u16,     \
                                                      sve_target_u16,     \
                                                      vMask);             \
         SVT_PRINT_VECTOR(sve_source_u16, uint16_t, "%04x");              \
@@ -49,8 +49,8 @@
     } while (0)
 #else
 
-#undef sdl_sve_rgb32_blend_op_fill_alpha
-#define sdl_sve_rgb32_blend_op_fill_alpha(ma_alpha_chn_idx) \
+#undef lv_sve_rgb32_blend_op_fill_alpha
+#define lv_sve_rgb32_blend_op_fill_alpha(ma_alpha_chn_idx) \
     do {                                                    \
         if (sve_src_chn_idx == (ma_alpha_chn_idx)) {        \
             /* fill alpha */                                \
@@ -60,14 +60,14 @@
         }                                                   \
     } while (0)
 
-#undef sdl_sve_rgb32_blend_op_copy_alpha
-#define sdl_sve_rgb32_blend_op_copy_alpha(ma_alpha_chn_idx) \
+#undef lv_sve_rgb32_blend_op_copy_alpha
+#define lv_sve_rgb32_blend_op_copy_alpha(ma_alpha_chn_idx) \
     do {                                                    \
         sve_target_u16 = sve_source_u16;                    \
     } while (0)
 
-#undef sdl_sve_rgb32_blend_to_rgb565_op
-#define sdl_sve_rgb32_blend_to_rgb565_op(ma_alpha_chn_idx)  \
+#undef lv_sve_rgb32_blend_to_rgb565_op
+#define lv_sve_rgb32_blend_to_rgb565_op(ma_alpha_chn_idx)  \
     do {                                                    \
         sve_target_u16 = sve_source_u16;                    \
         SVT_PRINT_VECTOR(sve_target_u16, uint16_t, "%04x"); \
@@ -75,48 +75,48 @@
 
 #endif
 
-#include "SDL_sve2_swizzle.h"
+#include "lv_sve2_swizzle.h"
 
 __attribute__((nonnull(1, 2))) void sve_tester(uint32_t *__restrict pwSource,
                                                uint32_t *__restrict pwTarget,
                                                uint8_t *__restrict pchSourceMask,
                                                size_t uStride);
 
-ARM_NONNULL(1, 2)
-void sdl_sve_rgb565_stride_blend_with_opacity(uint16_t *SDL_RESTRICT phwSource,
-                                              uint16_t *SDL_RESTRICT phwTarget,
+LV_NONNULL(1, 2)
+void lv_sve_rgb565_stride_blend_with_opacity(uint16_t *LV_RESTRICT phwSource,
+                                              uint16_t *LV_RESTRICT phwTarget,
                                               size_t uStride,
                                               uint16_t hwOpacity)
 {
-    sdl_sve_stride_loop_rgb16(uStride, vTailPred)
+    lv_sve_stride_loop_rgb16(uStride, vTailPred)
     {
 
         svuint16x3_t vSource16x3 =
-            sdl_sve_rgb565_unpack(svld1_u16(vTailPred, phwSource));
+            lv_sve_rgb565_unpack(svld1_u16(vTailPred, phwSource));
 
         svuint16x3_t vTarget16x3 =
-            sdl_sve_rgb565_unpack(svld1_u16(vTailPred, phwTarget));
+            lv_sve_rgb565_unpack(svld1_u16(vTailPred, phwTarget));
 
-        sdl_sve_pixel_ccc_foreach_chn(
+        lv_sve_pixel_ccc_foreach_chn(
             vSource16x3,
             vTarget16x3,
             {
-                sve_target_u16 = sdl_sve_chn_blend_with_opacity_fast(
+                sve_target_u16 = lv_sve_chn_blend_with_opacity_fast(
                     sve_source_u16,
                     sve_target_u16,
                     hwOpacity);
             });
 
-        svst1_u16(vTailPred, phwTarget, sdl_sve_rgb565_pack(vTarget16x3));
+        svst1_u16(vTailPred, phwTarget, lv_sve_rgb565_pack(vTarget16x3));
 
         phwSource += sve_iteration_advance;
         phwTarget += sve_iteration_advance;
     }
 }
 
-void sdl_sve_rgb565_blend_with_opacity(uint8_t *SDL_RESTRICT pchSource,
+void lv_sve_rgb565_blend_with_opacity(uint8_t *LV_RESTRICT pchSource,
                                        size_t uSourceStride,
-                                       uint8_t *SDL_RESTRICT pchTarget,
+                                       uint8_t *LV_RESTRICT pchTarget,
                                        size_t uTargetStride,
                                        int nWidth,
                                        int nHeight,
@@ -128,7 +128,7 @@ void sdl_sve_rgb565_blend_with_opacity(uint8_t *SDL_RESTRICT pchSource,
 
     while (nHeight--) {
 
-        sdl_sve_rgb565_stride_blend_with_opacity((uint16_t *)pchSource,
+        lv_sve_rgb565_stride_blend_with_opacity((uint16_t *)pchSource,
                                                  (uint16_t *)pchTarget,
                                                  nWidth,
                                                  hwOpacity);
@@ -199,7 +199,7 @@ int main(void)
     SVT_PRINT_VECTOR(vOutputT, uint8_t, "%02x");
 #endif
 
-#if 1
+#if 0
     svuint16_t vTemp;
     SVT_INIT_VECOTR(vTemp, uint16_t, 0xFF, 0x00, 0xF0, 0x0F);
     vTemp = svreinterpret_u16_u8(svnot_u8_m(svdup_u8(0x00), svptrue_b16(), svreinterpret_u8_u16(vTemp)));
@@ -208,29 +208,29 @@ int main(void)
 
     // svlsr_n_u16_m()
     /*
-    sdl_sve_accc8888_blend_to_nccc888_fill_alpha
-    sdl_sve_accc8888_blend_to_nccc888_copy_alpha
-    sdl_sve_ccca8888_blend_to_cccn888_fill_alpha
-    sdl_sve_ccca8888_blend_to_cccn888_copy_alpha
-    sdl_sve_a123_blend_to_321a_fill_alpha
-    sdl_sve_a123_blend_to_321a_copy_alpha
-    sdl_sve_123a_blend_to_a321_fill_alpha
-    sdl_sve_123a_blend_to_a321_copy_alpha
-    sdl_sve_accc_blend_to_ccca_fill_alpha
-    sdl_sve_accc_blend_to_ccca_copy_alpha
-    sdl_sve_ccca_blend_to_accc_fill_alpha
-    sdl_sve_ccca_blend_to_accc_copy_alpha
-    sdl_sve_a123_blend_to_a321_fill_alpha
-    sdl_sve_a123_blend_to_a321_copy_alpha
-    sdl_sve_123a_blend_to_321a_fill_alpha
-    sdl_sve_123a_blend_to_321a_copy_alpha
-    sdl_sve_argb8888_blend_to_rgb565
-    sdl_sve_rgba8888_blend_to_rgb565
-    sdl_sve_bgra8888_blend_to_rgb565
-    sdl_sve_abgr8888_blend_to_rgb565
+    lv_sve_accc8888_blend_to_nccc888_fill_alpha
+    lv_sve_accc8888_blend_to_nccc888_copy_alpha
+    lv_sve_ccca8888_blend_to_cccn888_fill_alpha
+    lv_sve_ccca8888_blend_to_cccn888_copy_alpha
+    lv_sve_a123_blend_to_321a_fill_alpha
+    lv_sve_a123_blend_to_321a_copy_alpha
+    lv_sve_123a_blend_to_a321_fill_alpha
+    lv_sve_123a_blend_to_a321_copy_alpha
+    lv_sve_accc_blend_to_ccca_fill_alpha
+    lv_sve_accc_blend_to_ccca_copy_alpha
+    lv_sve_ccca_blend_to_accc_fill_alpha
+    lv_sve_ccca_blend_to_accc_copy_alpha
+    lv_sve_a123_blend_to_a321_fill_alpha
+    lv_sve_a123_blend_to_a321_copy_alpha
+    lv_sve_123a_blend_to_321a_fill_alpha
+    lv_sve_123a_blend_to_321a_copy_alpha
+    lv_sve_argb8888_blend_to_rgb565
+    lv_sve_rgba8888_blend_to_rgb565
+    lv_sve_bgra8888_blend_to_rgb565
+    lv_sve_abgr8888_blend_to_rgb565
     */
 
-    sdl_sve_a123_blend_to_321a_copy_alpha(
+    lv_sve_a123_blend_to_321a_copy_alpha(
         pchSource,
         INPUT_BUFFER_SIZE / 2,
         pchTarget,
