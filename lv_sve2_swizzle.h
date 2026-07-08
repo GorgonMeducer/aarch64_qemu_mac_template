@@ -24,8 +24,8 @@
 
 #include "lv_sve2_extension.h"
 
-#define lv_sve_rgb32_stride_impl(ma_sve_chn_iterator, ...)   \
-    lv_sve_stride_loop_rgb32(uStride, vTailPred)             \
+#define lv_sve_rgb32_stride_impl(ma_sve_chn_iterator, ...)    \
+    lv_sve_stride_loop_rgb32(uStride, vTailPred)              \
     {                                                         \
                                                               \
         svuint16x4_t vSourceLow16x4 = svundef4_u16();         \
@@ -61,11 +61,11 @@
         pwTarget += sve_iteration_advance;                    \
     }
 
-#define lv_sve_rgb32_no_alpha_stride_impl(                   \
+#define lv_sve_rgb32_no_alpha_stride_impl(                    \
     ma_alpha_idx,                                             \
     ma_sve_chn_iterator,                                      \
     ...)                                                      \
-    lv_sve_stride_loop_rgb32(uStride, vTailPred)             \
+    lv_sve_stride_loop_rgb32(uStride, vTailPred)              \
     {                                                         \
                                                               \
         svuint16x4_t vSourceLow16x4 = svundef4_u16();         \
@@ -143,11 +143,11 @@
         phwTarget += sve_iteration_advance;                           \
     }
 
-#define lv_sve_rgb32_no_alpha_to_rgb565_stride_impl(         \
+#define lv_sve_rgb32_no_alpha_to_rgb565_stride_impl(          \
     ma_alpha_idx,                                             \
     ma_sve_chn_iterator,                                      \
     ...)                                                      \
-    lv_sve_stride_loop_rgb32(uStride, vTailPred)             \
+    lv_sve_stride_loop_rgb32(uStride, vTailPred)              \
     {                                                         \
                                                               \
         svuint16x4_t vSourceLow16x4 = svundef4_u16();         \

@@ -138,6 +138,39 @@ void lv_sve_rgb565_blend_with_opacity(uint8_t *LV_RESTRICT pchSource,
     }
 }
 
+/*! \note the Element range of vMask is [0, 0xFF]
+ */
+svuint16_t lv_sve_chn_premultiplied_blend_with_mask(svuint16_t vSource,
+                                                    svuint16_t vTarget,
+                                                    svuint16_t vSourceMask)
+{
+#if 0
+    vSource = svlsr_n_u16_x(svptrue_b16(),
+                            svmul_u16_x(svptrue_b16(), vSource, vReciprocal),
+                            8);
+
+    // vTarget = vSource * vMask + vTarget * (255 - vMask);
+    svuint16_t vTemp0 = svmul_u16_m(svptrue_b16(), vSource, vMask);
+    vTemp0 = svmla_u16_m(svptrue_b16(),
+                         vTemp0,
+                         vTarget,
+                         svsub_u16_m(svptrue_b16(),
+                                     svdup_u16(255),
+                                     vMask));
+
+    return svlsr_n_u16_m(svptrue_b16(), vTemp0, 8); // vTarget >> 8;
+#endif
+    svuint16_t vTemp0 = svmul_u16_x(svptrue_b16(), vTarget, svsub_u16_m(svptrue_b16(),
+                                                                        svdup_u16(255),
+                                                                        vSourceMask));
+                        
+    vTemp0 = svlsr_n_u16_m(  svptrue_b16(),  vTemp0, 8);
+
+    return svadd_u16_x(svptrue_b16(), vSource, vTemp0);
+    
+    return vTarget;
+}
+
 int main(void)
 {
     printf("Hello from AArch64 Linux!\n");
@@ -164,6 +197,12 @@ int main(void)
 #endif
     }
 
+    svcmpne_n_u16()
+
+    svsel_u16
+
+    svmov_u16
+
     uint8_t *pchTarget = (uint8_t *)malloc(OUTPUT_BUFFER_SIZE);
     assert(NULL != pchTarget);
     memset(pchTarget, 0xFF, OUTPUT_BUFFER_SIZE);
@@ -179,24 +218,51 @@ int main(void)
     for (size_t n = 0; n < PIXEL_COUNT; n++) {
         pchTargetMask[n] = 0xFF;
     }
-
-#if 0
-    svuint16_t vInputB;
-    SVT_INIT_VECOTR(vInputB, uint16_t, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
-    vInputB = svmul_n_u16_m(svptrue_b16(), vInputB, 256);
     
+#if 1
+    svuint16_t vInputB, vSource, vTarget, vMask;
+    SVT_INIT_VECOTR(vInputB, uint16_t, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
+    //vInputB = svmul_n_u16_m(svptrue_b16(), vInputB, 256);
+    vSource = vInputB;
+    vTarget = vInputB;
+    vMask = vInputB;
     svuint16_t vInputT;
     SVT_INIT_VECOTR(vInputT, uint16_t, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
-    vInputT = svmul_n_u16_m(svptrue_b16(), vInputT, 256);
-    
+    //vInputT = svmul_n_u16_m(svptrue_b16(), vInputT, 256);
 
-    svuint8_t vOutputB = svaddhnb_n_u16(vInputB, 1);
-    svuint8_t vOutputT = svaddhnt_n_u16(vOutputB, vInputT, 1);
+
+    svuint32_t vu32Low = svunpklo_u32(vInputB);
+    svuint32_t vu32High = svunpkhi_u32(vInputB);
+
+    //vu32Low = svmul_n_u32_x(svptrue_b32(), vu32Low, 0xFF00);
+    //vu32High = svmul_n_u32_x(svptrue_b32(), vu32High, 0xFF00);
+
+    //vu32Low = svdiv_u32_x(svptrue_b32(), svdup_u32(0xFF00), vu32Low); 
+    //vu32High = svdiv_u32_x(svptrue_b32(), svdup_u32(0xFF00), vu32High); 
+
+    svuint16_t vOutputB = svuzp1_u16(svreinterpret_u16_u32(vu32Low), svreinterpret_u16_u32(vu32High));
+
+    vOutputB = lv_sve_chn_premultiplied_blend_with_mask(vInputB, vInputB, vInputB);
+
+    //svuint32_t vOutputB = svmullb_n_u32(vInputB, 0xFF00);
+    SVT_PRINT_VECTOR(vu32Low, uint32_t, "%08x");
+
+    //svuint32_t vOutputT = svmullt_n_u32(vInputB, 0xFF00);
+    SVT_PRINT_VECTOR(vu32High, uint32_t, "%08x");
 
     SVT_PRINT_VECTOR(vInputB, uint16_t, "%04x");
-    SVT_PRINT_VECTOR(vInputT, uint16_t, "%04x");
-    SVT_PRINT_VECTOR(vOutputB, uint8_t, "%02x");
-    SVT_PRINT_VECTOR(vOutputT, uint8_t, "%02x");
+
+    
+
+    //vOutputB = svdiv_u32_x(svptrue_b32(), )
+
+    //svuint8_t vOutputB = svaddhnb_n_u16(vInputB, 1);
+    //svuint8_t vOutputT = svaddhnt_n_u16(vOutputB, vInputT, 1);
+
+    //SVT_PRINT_VECTOR(vInputB, uint16_t, "%04x");
+    //SVT_PRINT_VECTOR(vInputT, uint16_t, "%04x");
+    //SVT_PRINT_VECTOR(vOutputB, uint8_t, "%02x");
+    //SVT_PRINT_VECTOR(vOutputT, uint8_t, "%02x");
 #endif
 
 #if 0
